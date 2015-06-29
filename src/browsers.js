@@ -37,13 +37,23 @@ var SauceBrowsers = {
       }
     });
 
-    // Orientation isn't a built-in property of browsers in sauce, it's just an
-    // additional setting after the fact.
-    if (orientation) {
-      return _.extend({}, browser, { deviceOrientation: orientation });
-    } else {
-      return browser;
+    var result;
+
+    if (browser) {
+      result = _.extend({}, browser);
+
+      // Orientation isn't a built-in property of browsers in sauce, it's just an
+      // additional setting after the fact.
+      if (orientation) {
+        result.deviceOrientation = orientation;
+      }
+
+      if (resolution) {
+        result.deviceResolution = resolution;
+      }
     }
+
+    return result;
   },
 
   _normalize: function (data) {

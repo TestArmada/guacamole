@@ -1,6 +1,6 @@
 {
   "name": "saucebrowsers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Normalize access to sauce browser capabilities",
   "main": "index.js",
   "directories": {
