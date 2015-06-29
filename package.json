@@ -1,0 +1,33 @@
+{
+  "name": "saucebrowsers",
+  "version": "1.0.0",
+  "description": "Normalize access to sauce browser capabilities",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/testarmada/saucebrowsers.git"
+  },
+  "author": "Maciej Adwent",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/testarmada/saucebrowsers/issues"
+  },
+  "homepage": "https://github.com/testarmada/saucebrowsers#readme",
+  "dependencies": {
+    "cli-color": "^1.0.0",
+    "cli-table": "^0.3.1",
+    "lodash": "^3.9.3",
+    "q": "^1.4.1",
+    "request": "^2.58.0"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^2.2.4"
+  }
+}
