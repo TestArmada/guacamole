@@ -152,7 +152,7 @@ var SauceBrowsers = {
           deferred.reject(e);
           return;
         }
-        deferred.resolve(data.body);
+        deferred.resolve(data);
       }
     });
 
