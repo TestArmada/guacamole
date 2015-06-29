@@ -11,6 +11,10 @@ var SauceBrowsers = {
   SAUCE_URL: "https://saucelabs.com/rest/v1/info/platforms/all?resolutions=true",
   _haveCachedSauceBrowsers: false,
 
+  filter: function (fn) {
+    return browsers.filter(fn);
+  },
+
   // Return a browser by id if it exists in our browser list. Optionally return that
   // browser only if a resolution is supported by that browser environment
   get: function (id, resolution, orientation) {
