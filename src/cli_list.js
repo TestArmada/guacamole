@@ -13,11 +13,11 @@ module.exports = function () {
 
   var maxFamWidth = _.max(Object.keys(families), function (f) { return f.length; }).length + 5;
   var maxCLIWidth = _.max(_.pluck(browsers, "id"), function (b) { return b.length; }).length + 5;
-  var maxBrowserWidth = _.max(_.pluck(browsers, "deviceCapabilities.browserName"), function (b) { return b.length; }).length + 5;
-  var maxVersionWidth = _.max(_.pluck(browsers, "deviceCapabilities.version"), function (b) { return b.toString().length; }).length + 5;
-  var maxOSWidth = _.max(_.pluck(browsers, "deviceCapabilities.platform"), function (b) { return b.length; }).length + 5;
+  var maxBrowserWidth = _.max(_.pluck(browsers, "desiredCapabilities.browserName"), function (b) { return b.length; }).length + 5;
+  var maxVersionWidth = _.max(_.pluck(browsers, "desiredCapabilities.version"), function (b) { return b.toString().length; }).length + 5;
+  var maxOSWidth = _.max(_.pluck(browsers, "desiredCapabilities.platform"), function (b) { return b.length; }).length + 5;
   var maxDeviceWidth = _.max(_.map(browsers, function (b) {
-    return b.deviceCapabilities.deviceName || "Desktop";
+    return b.desiredCapabilities.deviceName || "Desktop";
   }), function (b) { return b.length; }).length + 5;
 
   var table = new Table({
@@ -33,10 +33,10 @@ module.exports = function () {
       table.push([
         clc.blackBright(count + "."),
         b.id,
-        b.deviceCapabilities.browserName,
-        b.deviceCapabilities.version,
-        b.deviceCapabilities.platform,
-        (b.deviceCapabilities.deviceName ? clc.cyanBright(b.deviceCapabilities.deviceName) : "Desktop")
+        b.desiredCapabilities.browserName,
+        b.desiredCapabilities.version,
+        b.desiredCapabilities.platform,
+        (b.desiredCapabilities.deviceName ? clc.cyanBright(b.desiredCapabilities.deviceName) : "Desktop")
       ]);
       count++;
     });

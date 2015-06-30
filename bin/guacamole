@@ -3,18 +3,42 @@
 var argv = require("yargs").argv;
 var browsers = require("../src/browsers");
 var listBrowsers = require("../src/cli_list");
+var project = require('../package.json');
+
+var fields = [].concat(browsers.CAPABILITY_FIELDS, browsers.INTERNAL_FIELDS);
 
 browsers.initialize()
   .then(function () {
-    if (argv.browser) {
-      var b = browsers.get(argv.browser);
-      if (b) {
-        console.log(b);
+
+    // Filter by fields because we don't want to accidentally use stuff like --help as a desiredCapabilities filter
+    var specs = {};
+    fields.forEach(function (field) {
+      if (argv[field]) {
+        specs[field] = argv[field];
+      }
+    });
+
+    if (Object.keys(specs).length > 0) {
+      var result = browsers.get(specs);
+      if (result && result.length > 0) {
+        if (result.length === 1) {
+          console.log(result[0]);
+        } else {
+          console.log(result);
+        }
       } else {
-        console.log("Browser with id '" + b + "' not found.");
+        console.log("Browsers that match the following specs could not be found: ", specs);
       }
     } else {
-      listBrowsers();
+      if (argv.help) {
+        console.log("Matching options: ")
+        fields.forEach(function (field) {
+          console.log("  --" + field + "=xxxxx");
+        });
+        console.log(project.name + " v" + project.version);
+      } else {
+        listBrowsers();
+      }
     }
   })
   .catch(function (err) {
