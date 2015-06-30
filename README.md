@@ -64,3 +64,8 @@ Fetch a specific browser from the command line with `--browser`
 $ ./node_modules/.bin/guacamole --browser=firefox_38_OS_X_10_9_Desktop
 { browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
 ```
+
+## Licenses
+
+All code not otherwise specified is Copyright Wal-Mart Stores, Inc.
+Released under the [MIT](./LICENSE) License.
