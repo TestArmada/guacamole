@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+var argv = require("yargs").argv;
+var browsers = require("../src/browsers");
+var listBrowsers = require("../src/cli_list");
+
+browsers.initialize()
+  .then(function () {
+    if (argv.browser) {
+      var b = browsers.get(argv.browser);
+      if (b) {
+        console.log(b);
+      } else {
+        console.log("Browser with id '" + b + "' not found.");
+      }
+    } else {
+      listBrowsers();
+    }
+  })
+  .catch(function (err) {
+    console.log("error:", err);
+  });

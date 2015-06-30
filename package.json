@@ -1,6 +1,6 @@
 {
-  "name": "saucebrowsers",
-  "version": "1.0.4",
+  "name": "guacamole",
+  "version": "1.0.5",
   "description": "Normalize access to sauce browser capabilities",
   "main": "index.js",
   "directories": {
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/testarmada/saucebrowsers.git"
+    "url": "git+https://github.com/testarmada/guacamole.git"
   },
   "author": "Maciej Adwent",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/testarmada/saucebrowsers/issues"
+    "url": "https://github.com/testarmada/guacamole/issues"
   },
-  "homepage": "https://github.com/testarmada/saucebrowsers#readme",
+  "homepage": "https://github.com/testarmada/guacamole#readme",
   "dependencies": {
     "cli-color": "^1.0.0",
     "cli-table": "^0.3.1",
@@ -32,6 +32,6 @@
     "mocha": "^2.2.4"
   },
   "bin": {
-    "saucebrowsers": "./bin/saucebrowsers"
+    "guacamole": "./bin/guacamole"
   }
 }
