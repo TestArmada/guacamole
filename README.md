@@ -25,19 +25,53 @@ var guacamole = require("guacamole");
 
 guacamole.initialize()
   .then(function () {
-    var desiredCapabilities = guacamole.get({
+
+    // Fetch a specific Firefox by id
+    console.log(guacamole.get({
       id: "firefox_38_OS_X_10_9_Desktop"
-    });
-    // Yields: { browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
-    console.log(desiredCapabilities);
+    }));
+    // Yields: [{ browserName: 'firefox', version: '38', platform: 'OS X 10.9' }]
 
-
-    var desiredCapabilities = guacamole.get({
+    // Fetch a specific Firefox by id, with a set screen resolution
+    console.log(guacamole.get({
       id: "firefox_38_OS_X_10_9_Desktop",
       screenResolution: "1024x768"
-    });
+    }));
     // Yields: { browserName: 'firefox', version: '38', platform: 'OS X 10.9', screenResolution: '1024x768' }
-    console.log(desiredCapabilities);
+
+    // Fetch a list of available Chrome 43 variants:
+    guacamole.get({ version: "43" });
+
+    // Yields:
+    /*
+    [ { browserName: 'chrome',
+        version: '43',
+        platform: 'Linux' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'OS X 10.10' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'OS X 10.6' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'OS X 10.8' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'OS X 10.9' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'Windows 2003' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'Windows 2008' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'Windows 2012' },
+      { browserName: 'chrome',
+        version: '43',
+        platform: 'Windows 2012 R2' } ]
+    */
   })
   .catch(function (error) {
     console.error("Could not load browser details from Sauce API:", error);
