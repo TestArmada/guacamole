@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var browsers = require("../src/browsers");
+var listBrowsers = require("../src/cli_list");
+
+browsers.initialize()
+  .then(function () {
+    listBrowsers();
+  })
+  .catch(function (err) {
+    console.log("error:", err);
+  });
