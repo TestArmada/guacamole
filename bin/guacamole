@@ -3,44 +3,69 @@
 var argv = require("yargs").argv;
 var browsers = require("../src/browsers");
 var listBrowsers = require("../src/cli_list");
-var project = require('../package.json');
+var project = require("../package.json");
+var fs = require("fs");
+var path = require("path");
+var shrinkwrapFilepath = path.resolve("./guacamole-shrinkwrap.json");
+var request = require("request");
 
 var fields = [].concat(browsers.CAPABILITY_FIELDS, browsers.INTERNAL_FIELDS);
 
-browsers.initialize()
-  .then(function () {
+var cli = function () {
+  // Filter by fields because we don't want to accidentally use stuff like --help as a desiredCapabilities filter
+  var specs = {};
+  fields.forEach(function (field) {
+    if (argv[field]) {
+      specs[field] = argv[field];
+    }
+  });
 
-    // Filter by fields because we don't want to accidentally use stuff like --help as a desiredCapabilities filter
-    var specs = {};
-    fields.forEach(function (field) {
-      if (argv[field]) {
-        specs[field] = argv[field];
-      }
-    });
-
-    if (Object.keys(specs).length > 0) {
-      var result = browsers.get(specs);
-      if (result && result.length > 0) {
-        if (result.length === 1) {
-          console.log(result[0]);
-        } else {
-          console.log(result);
-        }
+  if (Object.keys(specs).length > 0) {
+    var result = browsers.get(specs);
+    if (result && result.length > 0) {
+      if (result.length === 1) {
+        console.log(result[0]);
       } else {
-        console.log("Browsers that match the following specs could not be found: ", specs);
+        console.log(result);
       }
     } else {
-      if (argv.help) {
-        console.log("Matching options: ")
-        fields.forEach(function (field) {
-          console.log("  --" + field + "=xxxxx");
-        });
-        console.log(project.name + " v" + project.version);
-      } else {
-        listBrowsers();
-      }
+      console.log("Browsers that match the following specs could not be found: ", specs);
     }
-  })
-  .catch(function (err) {
-    console.log("error:", err);
-  });
+  } else {
+    if (argv.help) {
+      console.log("Matching options: ")
+      fields.forEach(function (field) {
+        console.log("  --" + field + "=xxxxx");
+      });
+      console.log(project.name + " v" + project.version);
+    } else if (argv["generate-shrinkwrap"]) {
+      var file = fs.createWriteStream(shrinkwrapFilepath);
+      request(browsers.SAUCE_URL, function (err, response) {
+        if (err) {
+          console.log("Could not fetch sauce data from API at " + browsers.SAUCE_URL);
+          process.exit(1);
+          return;
+        }
+        fs.writeFileSync(shrinkwrapFilepath, response.body);
+        console.log("Wrote guacamole shrinkwrap to " + shrinkwrapFilepath);
+      });
+    } else {
+      listBrowsers();
+    }
+  }
+};
+
+if (argv.shrinkwrap) {
+  if (typeof argv.shrinkwrap === "string" && argv.shrinkwrap.length > 0) {
+    browsers.useShrinkwrap(argv.shrinkwrap);
+  } else {
+    browsers.useShrinkwrap(shrinkwrapFilepath);
+  }
+  cli();
+} else {
+  browsers.initialize()
+    .then(cli)
+    .catch(function (err) {
+      console.log("error:", err);
+    });
+}

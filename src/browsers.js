@@ -2,6 +2,8 @@ var Q = require("q");
 var _ = require("lodash");
 var request = require("request");
 var browsers = [];
+var fs = require("fs");
+var path = require("path");
 
 var SauceBrowsers = {
 
@@ -248,6 +250,20 @@ var SauceBrowsers = {
     });
 
     return deferred.promise;
+  },
+
+  // Signal that we want to load a shrinkwrap file (i.e. cached sauce labs API result) and bypass the Sauce API
+  useShrinkwrap: function (shrinkwrapFilepath) {
+    shrinkwrapFilepath = path.resolve(shrinkwrapFilepath || "./guacamole-shrinkwrap.json");
+    try {
+      var data = JSON.parse(fs.readFileSync(shrinkwrapFilepath, "utf8"));
+      if (data) {
+        this._haveCachedSauceBrowsers = true;
+        browsers = this._normalize(data);
+      }
+    } catch (e) {
+      throw new Error("Could not read guacamole shrinkwrap file at : " + shrinkwrapFilepath);
+    }
   },
 
   // Return a promise that we'll build a list of supported browsers

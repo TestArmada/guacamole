@@ -187,6 +187,41 @@ Command Line Options:
   --deviceOrientation=xxxxx    (always used)
 ```
 
+### Creating and Using a Shrinkwrap File / Allowing Synchronous Usage
+
+You can cache the results of the SauceLabs browser API:
+
+```console
+./node_modules/.bin/guacamole --generate-shrinkwrap
+Wrote guacamole shrinkwrap to /Users/example/myproject/guacamole-shrinkwrap.json
+```
+
+This will cache a local copy of the SauceLabs API result, allowing you to bypass a network request and use the `guacamole` API in a synchronous fashion. To use the generated shrinkwrap, call `useShrinkwrap()`:
+
+```javascript
+var guacamole = require("guacamole");
+
+// Tell guacamole to use ./guacamole-shrinkwrap.json
+guacamole.useShrinkwrap();
+
+// Fetch a specific Firefox by id
+console.log(guacamole.get({ id: "firefox_38_OS_X_10_9_Desktop" }));
+// Yields: [{ browserName: 'firefox', version: '38', platform: 'OS X 10.9' }]
+```
+
+If you have a shrinkwrap stored somewhere other than the default location, you can specify the location when calling `useShrinkwrap()`:
+
+```javascript
+// Tell guacamole to use ./settings/guacamole-shrinkwrap.json
+guacamole.useShrinkwrap("./settings/guacamole-shrinkwrap.json");
+```
+
+The same logic works on the command line version of `guacamole` with the `shrinkwrap` option:
+```console
+./node_modules/.bin/guacamole --shrinkwrap=./settings/guacamole-shrinkwrap.json --id=firefox_38_OS_X_10_9_Desktop
+{ browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
+```
+
 ## Licenses
 
 All code not otherwise specified is Copyright Wal-Mart Stores, Inc.
