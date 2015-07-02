@@ -222,6 +222,28 @@ The same logic works on the command line version of `guacamole` with the `shrink
 { browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
 ```
 
+### Windows Version "Polyfills"
+
+While the SauceLabs web-based platform configurator claims to support Windows XP, 7, 8, and 8.1, these platforms are instead provided by equivalent server versions of Windows, thus they do not show up in the Sauce browser API. To account for this, `guacamole` supports the following platforms:
+
+```
+OS           |  guacamole translation  |  sauce-side fulfillment
+-------------+-------------------------+--------------------------
+Windows XP   |  Windows 2003           |  Windows 2003 R2
+Windows 7    |  Windows 2008           |  Windows 2008 R2
+Windows 8    |  Windows 2012           |  Windows Server 2012
+Windows 8.1  |  Windows 2012 R2        |  Windows Server 2012 R2
+```
+
+If your code requests a browser id with the substring `Windows_8_1`, for example, it will be translated like so:
+
+```console
+$ guacamole --id=chrome_43_Windows_8_1_Desktop
+{ browserName: 'chrome',
+  version: '43',
+  platform: 'Windows 2012 R2' }
+```
+
 ## Licenses
 
 All code not otherwise specified is Copyright Wal-Mart Stores, Inc.
