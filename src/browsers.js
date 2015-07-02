@@ -40,6 +40,7 @@ var SauceBrowsers = {
                             // listing API specifies a device field but does NOT have the word "device"
                             // in it, it's assumed to be an simulator, and we perform a transformation,
                             // i.e.: "iphone" -> "iPhone Simulator", "Mac <version>" -> "OS X <version>", etc.
+                            // Some devices, like ones using android, have to use the long_name property
 
     "platformVersion",      // i.e.: "4.4"
     "platformName",         // i.e.: "Android"
@@ -203,7 +204,7 @@ var SauceBrowsers = {
         var deviceName = (browser.device ? browser.device : "Desktop");
         var osName = browser.os;
 
-        // For a real device, don't translate to a simulator devicename
+        // For a real device, don't translate to a simulator or emulator devicename
         if (deviceName.toLowerCase().indexOf("device") === -1) {
           if (deviceName.toLowerCase() == "ipad") {
             deviceName = "iPad Simulator";
@@ -215,8 +216,10 @@ var SauceBrowsers = {
             osName = "iOS";
           }
 
-          if(deviceName.toLowerCase() == "android") {
-            deviceName = "Android Simulator";
+          // note: name comes from api_name
+          if(name.toLowerCase() == "android") {
+            // eg: long_name: "Google Nexus 7C Emulator",
+            deviceName = browser.long_name;
           }
         }
 
