@@ -37,6 +37,10 @@ var cli = function () {
       fields.forEach(function (field) {
         console.log("  --" + field + "=xxxxx");
       });
+      console.log("Other Options:");
+      console.log("  --generate-shrinkwrap       Cache a SauceLabs browser API result and store it to disk");
+      console.log("  --shrinkwrap                Use the stored shrinkwrap when performing queries (skip network)");
+      console.log("  --shrinkwrap=path/to/file   Use a specific shrinkwrap file");
       console.log(project.name + " v" + project.version);
     } else if (argv["generate-shrinkwrap"]) {
       var file = fs.createWriteStream(shrinkwrapFilepath);
