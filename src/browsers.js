@@ -5,6 +5,23 @@ var browsers = [];
 var fs = require("fs");
 var path = require("path");
 
+var cleanPlatformName = function (str) { return str.split(" ").join("_").split(".").join("_"); };
+
+// SauceLabs leaves certain OSes out of its REST API, but these
+// are configurable via the web-based platform configurator. The
+// following are SauceLabs's internal substitutions for Windows OSes.
+var OS_TRANSLATIONS = {
+  "Windows XP":  "Windows 2003",     // Windows 2003 R2
+  "Windows 7":   "Windows 2008",     // Windows 2008 R2
+  "Windows 8":   "Windows 2012",     // Windows Server 2012
+  "Windows 8.1": "Windows 2012 R2"   // Windows Server 2012 R2
+};
+
+var OS_TRANSLATIONS_FROM_ID = {};
+Object.keys(OS_TRANSLATIONS).forEach(function (name) {
+  OS_TRANSLATIONS_FROM_ID[cleanPlatformName(name)] = OS_TRANSLATIONS[name];
+});
+
 var SauceBrowsers = {
 
   CAPABILITY_FIELDS: [
@@ -68,7 +85,21 @@ var SauceBrowsers = {
 
       // Match by id (only if id has been specified)
       if (specs.id && browser.id !== specs.id) {
-        matching = false;
+        var matchesTranslated = false;
+        // Check if we've asked for a browser that isn't in the matrix, but would be if
+        // SauceLabs had any of the OSes in OS_TRANSLATIONS.
+        Object.keys(OS_TRANSLATIONS_FROM_ID).forEach(function (otherPlatformId) {
+          // Check if the translated specs.id matches this browser
+          var translatedPlatformName = OS_TRANSLATIONS_FROM_ID[otherPlatformId];
+          if (browser.id === specs.id.replace(cleanPlatformName(otherPlatformId), cleanPlatformName(translatedPlatformName))) {
+            matchesTranslated = true;
+          }
+        });
+        if (matchesTranslated) {
+          // pass through!
+        } else {
+          matching = false;
+        }
       }
 
       // Match by family (only if family has been specified)
@@ -88,8 +119,20 @@ var SauceBrowsers = {
       SauceBrowsers.CAPABILITY_FIELDS.forEach(function (field) {
         // Disqualify with a given field only if we've specified an explicit value for it
         if (ignoreFields.indexOf(field) === -1 && specs[field]) {
-          if (browser.desiredCapabilities[field] !== specs[field].toString()) {
-            matching = false;
+          // Special case: if we've specified platform, we check against the asked-for value,
+          // but we also check against a translated value.
+          if (field === "platform") {
+            // If we're looking for an OS that has a weird name translation API-side,
+            // allow a match to the translated version
+            var translation = OS_TRANSLATIONS[specs[field]];
+            if (browser.desiredCapabilities.platform !== translation
+              && browser.desiredCapabilities.platform !== specs[field]) {
+              matching = false;
+            }
+          } else {
+            if (browser.desiredCapabilities[field] !== specs[field].toString()) {
+              matching = false;
+            }
           }
         }
       });
@@ -157,8 +200,6 @@ var SauceBrowsers = {
           family = "Other";
         }
 
-        var clean = function (str) { return str.split(" ").join("_").split(".").join("_"); };
-
         var deviceName = (browser.device ? browser.device : "Desktop");
         var osName = browser.os;
 
@@ -186,10 +227,10 @@ var SauceBrowsers = {
         var result = {
           // name , version, OS, device
           id: (
-            clean(name)
-            + "_" + clean(browser.short_version)
-            + "_" + clean(osName)
-            + "_" + clean(deviceName)
+            cleanPlatformName(name)
+            + "_" + cleanPlatformName(browser.short_version)
+            + "_" + cleanPlatformName(osName)
+            + "_" + cleanPlatformName(deviceName)
           ),
           browserName: browser.api_name,
           version: browser.short_version,
