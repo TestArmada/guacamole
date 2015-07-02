@@ -1,6 +1,6 @@
 # guacamole
 
-`guacamole` is a wrapper for the SauceLabs browser API.
+`guacamole` is a wrapper for the SauceLabs platform API (i.e. the browser/platform selector API).
 
 ### Features:
   - Standardized browser identification with machine and human-readable browser identifiers.
