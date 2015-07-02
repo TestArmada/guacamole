@@ -46,7 +46,7 @@ var cli = function () {
           process.exit(1);
           return;
         }
-        fs.writeFileSync(shrinkwrapFilepath, response.body);
+        fs.writeFileSync(shrinkwrapFilepath, JSON.stringify(JSON.parse(response.body), null, 2));
         console.log("Wrote guacamole shrinkwrap to " + shrinkwrapFilepath);
       });
     } else {
