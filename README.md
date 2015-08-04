@@ -5,6 +5,7 @@
 ### Features:
   - Standardized browser identification with machine and human-readable browser identifiers.
   - Generate Sauce `desiredCapabilities` objects from a browser id, with screen resolution and device orientation support.
+  - Appium support for native app `desiredCapabilities` objects
   - Built-in command-line interface for listing browsers and generating `desiredCapabilities` objects.
   - Normalize strings from the SauceLabs browser list API to values that `desiredCapabilities` actually consumes.
 
@@ -131,23 +132,58 @@ Browsers that match the following specs could not be found:  { screenResolution:
 For example, filtering by `--version=43` displays all available versions of Chrome 43:
 ```console
 $ ./bin/guacamole --version=43
-[ { browserName: 'chrome', version: '43', platform: 'Linux' },
-  { browserName: 'chrome', version: '43', platform: 'OS X 10.10' },
-  { browserName: 'chrome', version: '43', platform: 'OS X 10.6' },
-  { browserName: 'chrome', version: '43', platform: 'OS X 10.8' },
-  { browserName: 'chrome', version: '43', platform: 'OS X 10.9' },
-  { browserName: 'chrome',
-    version: '43',
-    platform: 'Windows 2003' },
-  { browserName: 'chrome',
-    version: '43',
-    platform: 'Windows 2008' },
-  { browserName: 'chrome',
-    version: '43',
-    platform: 'Windows 2012' },
-  { browserName: 'chrome',
-    version: '43',
-    platform: 'Windows 2012 R2' } ]
+[
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Linux"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "OS X 10.10"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "OS X 10.11"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "OS X 10.8"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "OS X 10.9"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 10"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 2003"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 2008"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 2012"
+  },
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 2012 R2"
+  }
+]
 ```
 
 ### Matchable / Amendable desiredCapabilities
@@ -219,7 +255,13 @@ guacamole.useShrinkwrap("./settings/guacamole-shrinkwrap.json");
 The same logic works on the command line version of `guacamole` with the `shrinkwrap` option:
 ```console
 ./node_modules/.bin/guacamole --shrinkwrap=./settings/guacamole-shrinkwrap.json --id=firefox_38_OS_X_10_9_Desktop
-{ browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
+[
+  {
+    "browserName": "firefox",
+    "version": "38",
+    "platform": "OS X 10.9"
+  }
+]
 ```
 
 ### Windows Version "Polyfills"
@@ -239,9 +281,13 @@ If your code requests a browser id with the substring `Windows_8_1`, for example
 
 ```console
 $ guacamole --id=chrome_43_Windows_8_1_Desktop
-{ browserName: 'chrome',
-  version: '43',
-  platform: 'Windows 2012 R2' }
+[
+  {
+    "browserName": "chrome",
+    "version": "43",
+    "platform": "Windows 2012 R2"
+  }
+]
 ```
 
 ## Licenses
