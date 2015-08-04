@@ -186,6 +186,33 @@ $ ./bin/guacamole --version=43
 ]
 ```
 
+### Native App desiredCapabilities (Appium Support)
+
+`guacamole` supports appium-targeting. Examples:
+
+```sh
+$ ./bin/guacamole --id=Google_Nexus_7_HD_Emulator_Android_4_4_Linux
+[
+  {
+    "version": "4.4",
+    "platform": "Android",
+    "deviceName": "Google Nexus 7 HD Emulator",
+    "appium-version": "1.4.7"
+  }
+]
+
+$ ./bin/guacamole --id=iPhone_Simulator_iOS_8_2_OS_X_10_10
+[
+  {
+    "version": "8.2",
+    "platform": "iOS",
+    "deviceName": "iPhone Simulator",
+    "platformName": "iOS",
+    "appium-version": "1.4.7"
+  }
+]
+```
+
 ### Matchable / Amendable desiredCapabilities
 
 The following list of filter options can be used in the programmatic API or command line interface:
