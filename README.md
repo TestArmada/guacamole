@@ -188,7 +188,7 @@ $ ./bin/guacamole --version=43
 
 ### Native App desiredCapabilities (Appium Support)
 
-`guacamole` supports appium-targeting. Examples:
+`guacamole` supports appium environments, and will ensure that the `appium-version` is set to the currently-recommended backend version of Appium. Examples:
 
 ```sh
 $ ./bin/guacamole --id=Google_Nexus_7_HD_Emulator_Android_4_4_Linux
