@@ -23,11 +23,7 @@ var cli = function () {
   if (Object.keys(specs).length > 0) {
     var result = browsers.get(specs);
     if (result && result.length > 0) {
-      if (result.length === 1) {
-        console.log(result[0]);
-      } else {
-        console.log(result);
-      }
+      console.log(JSON.stringify(result, null, 2));
     } else {
       console.log("Browsers that match the following specs could not be found: ", specs);
     }
