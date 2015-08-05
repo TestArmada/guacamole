@@ -24,12 +24,20 @@ describe("Appium Devices", function () {
   });
 
   it("Finds an iPhone with iOS 8.2 Correctly (with multiple host OSes)", function () {
-    var result = Browsers.get({ platform: "iOS", "version": "8.2", "deviceName": "iPhone Simulator" });
-    expect(result).to.have.length(2);
+    var result = Browsers.get({
+      "platform": "iOS",
+      "platformVersion": "8.2",
+      "deviceName": "iPhone Simulator"
+    });
+    expect(result).to.have.length(1);
   });
 
   it("Finds a Google Nexus 7", function () {
-    var result = Browsers.get({ platform: "Android", "version": "4.4", "deviceName": "Google Nexus 7 HD Emulator" });
+    var result = Browsers.get({
+      "platform": "Android",
+      "platformVersion": "4.4",
+      "deviceName": "Google Nexus 7 HD Emulator"
+    });
     expect(result).to.have.length(1);
   });
 

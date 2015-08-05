@@ -306,7 +306,6 @@ var SauceBrowsers = {
         var result = {
           // name , version, OS, device
           id: guacamoleId,
-          version: browser.short_version,
           platform: osName,
           family: family,
           resolutions: browser.resolutions
@@ -314,6 +313,7 @@ var SauceBrowsers = {
 
         if (browser.automation_backend === "appium") {
           result["appium-version"] = browser.recommended_backend_version;
+          result.platformVersion = browser.short_version;
 
           if (deviceName.toLowerCase().indexOf("android") > -1) {
             result.platformName = osName;
@@ -325,6 +325,7 @@ var SauceBrowsers = {
         } else {
 
           result.browserName = browser.api_name;
+          result.version = browser.short_version;
 
           if (deviceName.toLowerCase().indexOf("android") > -1) {
             result.platformVersion = browser.short_version || browser.version;
