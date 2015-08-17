@@ -1,6 +1,7 @@
 var Q = require("q");
 var _ = require("lodash");
 var request = require("request");
+var syncRequest = require("sync-request");
 var browsers = [];
 var fs = require("fs");
 var path = require("path");
@@ -382,6 +383,17 @@ var SauceBrowsers = {
     return deferred.promise;
   },
 
+  _fetchSync: function () {
+    var res = syncRequest("GET", this.SAUCE_URL);
+    var data;
+    try {
+      data = JSON.parse(res.getBody("utf8"));
+    } catch (e) {
+      throw new Error("Could not fetch saucelabs browsers from " + this.SAUCE_URL);
+    }
+    return data;
+  },
+
   // Signal that we want to load a shrinkwrap file (i.e. cached sauce labs API result) and bypass the Sauce API
   useShrinkwrap: function (shrinkwrapFilepath) {
     shrinkwrapFilepath = path.resolve(shrinkwrapFilepath || "./guacamole-shrinkwrap.json");
@@ -393,6 +405,14 @@ var SauceBrowsers = {
       }
     } catch (e) {
       throw new Error("Could not read guacamole shrinkwrap file at : " + shrinkwrapFilepath);
+    }
+  },
+
+  useServiceSync: function () {
+    var data = this._fetchSync();
+    if (data) {
+      this._haveCachedSauceBrowsers = true;
+      browsers = this._normalize(data);
     }
   },
 
