@@ -2,6 +2,7 @@ var Q = require("q");
 var _ = require("lodash");
 var request = require("request");
 var browsers = [];
+var latest = {};
 var fs = require("fs");
 var path = require("path");
 
@@ -87,6 +88,10 @@ var SauceBrowsers = {
       // Match by id (only if id has been specified)
       if (specs.id && browser.id !== specs.id) {
         var matchesTranslated = false;
+
+
+
+
         // Check if we've asked for a browser that isn't in the matrix, but would be if
         // SauceLabs had any of the OSes in OS_TRANSLATIONS.
         Object.keys(OS_TRANSLATIONS_FROM_ID).forEach(function (otherPlatformId) {
@@ -241,6 +246,14 @@ var SauceBrowsers = {
           family: family,
           resolutions: browser.resolutions
         };
+
+        if (!latest[browser.api_name]) {
+          latest[browser.api_name] = {};
+        }
+
+        if(!latest[browser.api_name][osName] || latest[browser.api_name][osName] < result.version) {
+          latest[browser.api_name][osName] = parseInt(result.version, 10);
+        }
 
         if (deviceName.toLowerCase().indexOf("android") > -1) {
           result.platformVersion = browser.short_version || browser.version;
