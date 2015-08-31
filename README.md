@@ -111,6 +111,13 @@ $ ./node_modules/.bin/guacamole --id=firefox_38_OS_X_10_9_Desktop
 { browserName: 'firefox', version: '38', platform: 'OS X 10.9' }
 ```
 
+Fetch the latest version of a browser/OS combination with `--id` and `latest`:
+
+```console
+$ ./node_modules/.bin/guacamole --id=firefox_latest_OS_X_10_9_Desktop
+{ browserName: 'firefox', version: '40', platform: 'OS X 10.9' }
+```
+
 Amend screenResolution with `--screenResolution`. If the API supports that screen resolution, you'll get a result:
 ```console
 $ ./bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x768
