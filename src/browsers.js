@@ -67,6 +67,8 @@ var SauceBrowsers = {
     return browsers.filter(fn);
   },
 
+  latest: latest,
+
   // Return a list of browser desiredCapabilities objects if they exist in our browser list.
   //
   // Match by:
@@ -83,17 +85,26 @@ var SauceBrowsers = {
   // with id, family, and a supported resolutions array (i.e. guacamole's raw internal representation)
   //
   get: function (specs, wrapped) {
+
+    if (specs.id.indexOf("latest") > -1) {
+      var splitId = specs.id.split("latest");
+      if (splitId.length === 2) {
+        var browserId = splitId[0].replace("_", "");
+        var osId = splitId[1].replace("_", "");
+        if (latest[browserId] && latest[browserId][osId]) {
+          var latestVersion = latest[browserId][osId];
+          var newId = splitId[0] + latestVersion + splitId[1];
+          specs.id = newId;
+        }
+      }
+    }
+
     return browsers.filter(function (browser) {
       // Match specs. Ignore orientation, and special case screenResolution
       var matching = true;
-
       // Match by id (only if id has been specified)
       if (specs.id && browser.id !== specs.id) {
         var matchesTranslated = false;
-
-
-
-
         // Check if we've asked for a browser that isn't in the matrix, but would be if
         // SauceLabs had any of the OSes in OS_TRANSLATIONS.
         Object.keys(OS_TRANSLATIONS_FROM_ID).forEach(function (otherPlatformId) {
@@ -301,12 +312,20 @@ var SauceBrowsers = {
             + "_" + cleanPlatformName(hostOSName)
           )
         } else {
+          var osKey = cleanPlatformName(osName) + "_" + cleanPlatformName(deviceName);
           guacamoleId = (
             cleanPlatformName(name)
             + "_" + cleanPlatformName(browser.short_version)
-            + "_" + cleanPlatformName(osName)
-            + "_" + cleanPlatformName(deviceName)
-          )
+            + "_" + osKey
+          );
+
+          if (!latest[browser.api_name]) {
+            latest[browser.api_name] = {};
+          }
+
+          if(!latest[browser.api_name][osKey] || latest[browser.api_name][osKey] < browser.short_version) {
+            latest[browser.api_name][osKey] = parseInt(browser.short_version, 10);
+          }
         }
 
         var result = {
@@ -316,14 +335,6 @@ var SauceBrowsers = {
           family: family,
           resolutions: browser.resolutions
         };
-
-        if (!latest[browser.api_name]) {
-          latest[browser.api_name] = {};
-        }
-
-        if(!latest[browser.api_name][osName] || latest[browser.api_name][osName] < result.version) {
-          latest[browser.api_name][osName] = parseInt(result.version, 10);
-        }
 
         if (browser.automation_backend === "appium") {
           result["appium-version"] = browser.recommended_backend_version;
