@@ -86,7 +86,7 @@ var SauceBrowsers = {
   //
   get: function (specs, wrapped) {
 
-    if (specs.id.indexOf("latest") > -1) {
+    if (specs.id && specs.id.indexOf("latest") > -1) {
       var splitId = specs.id.split("latest");
       if (splitId.length === 2) {
         var browserId = splitId[0].replace("_", "");

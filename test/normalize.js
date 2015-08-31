@@ -23,8 +23,20 @@ describe("normalizer", function () {
     });
   });
 
-  it("normalizes Chrome43 on Windows correctly", function () {
-    var id = "chrome_43_Windows_2012_R2_Desktop";
+  it("normalizes Chrome42 on Windows correctly", function () {
+    var id = "chrome_42_Windows_2012_R2_Desktop";
+    var result = Browsers.get({ id: id });
+    expect(result).to.have.length(1);
+
+    var chrome43 = result[0];
+    expect(chrome43).to.have.property("browserName", "chrome");
+    expect(chrome43).to.have.property("platform", "Windows 2012 R2");
+    expect(chrome43).to.have.property("version", "42");
+    expect(chrome43).to.have.property("browserName", "chrome");
+  });
+
+  it("normalizes latest Chrome version on Windows correctly", function () {
+    var id = "chrome_latest_Windows_2012_R2_Desktop";
     var result = Browsers.get({ id: id });
     expect(result).to.have.length(1);
 
