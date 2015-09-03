@@ -61,9 +61,19 @@ if (argv.shrinkwrap) {
   } else {
     browsers.useShrinkwrap(shrinkwrapFilepath);
   }
+
+  if (typeof argv.device_additions === "string" && argv.device_additions.length > 0) {
+    browsers.addNormalizedBrowsersFromFile(argv.device_additions);
+  }
+
   cli();
 } else {
   browsers.initialize()
+    .then(function () {
+      if (typeof argv.device_additions === "string" && argv.device_additions.length > 0) {
+        browsers.addNormalizedBrowsersFromFile(argv.device_additions);
+      }
+    })
     .then(cli)
     .catch(function (err) {
       console.log("error:", err);
