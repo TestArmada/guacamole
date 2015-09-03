@@ -440,6 +440,21 @@ var SauceBrowsers = {
     }
   },
 
+  addNormalizedBrowsersFromFile: function (filePath) {
+    var self = this;
+    filePath = path.resolve(filePath);
+    try {
+      var data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      if (_.isArray(data)) {
+        data.forEach(function (normalizedBrowser) {
+          browsers.push(normalizedBrowser);
+        });
+      }
+    } catch (e) {
+      throw new Error("Could not read file for additional devices/browsers at : " + filePath);
+    }
+  },
+
   // Return a promise that we'll build a list of supported browsers
   initialize: function () {
     var deferred = Q.defer();

@@ -41,4 +41,12 @@ describe("Appium Devices", function () {
     expect(result).to.have.length(1);
   });
 
+  it("Adds an additional unlisted device from a file", function () {
+    Browsers.addNormalizedBrowsersFromFile(path.resolve("./test_support/device_additions.json"));
+    var result = Browsers.get({
+      "id": "iphone6_device"
+    });
+    expect(result).to.have.length(1);
+  });
+
 });
