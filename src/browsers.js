@@ -182,19 +182,21 @@ var SauceBrowsers = {
         }
       }
       
-      // clean up capabilities here 
-      if(result.appiumVersion || result['appium-version']){
-        // if using appium, use safari as browser for iOS
-        if(result.platformName === 'iOS'){
-          result.browserName = 'Safari';
-        }
-      }else{
-        if(result.platform === 'iOS'){
-          // iOS is not platform name, use OS X 10.10 instead
-          result.platform = 'OS X 10.10';
-        }else if(result.platform === 'Android'){
-          // Android is not platform name, use linux instead
-          result.platform = 'Linux';
+      // clean up capabilities here, only deal with saucelabs wrap here
+      if (wrapped) {
+        if(result.desiredCapabilities['appiumVersion'] || result.desiredCapabilities['appium-version']){
+          // if using appium, use safari as browser for iOS
+          if(result.desiredCapabilities.platformName === 'iOS'){
+            result.desiredCapabilities.browserName = 'Safari';
+          }
+        }else{
+          if(result.desiredCapabilities.platform === 'iOS'){
+            // iOS is not platform name, use OS X 10.10 instead
+            result.desiredCapabilities.platform = 'OS X 10.10';
+          }else if(result.desiredCapabilities.platform === 'Android'){
+            // Android is not platform name, use linux instead
+            result.desiredCapabilities.platform = 'Linux';
+          }
         }
       }
       
