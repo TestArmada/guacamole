@@ -331,10 +331,24 @@ var SauceBrowsers = {
         var result = {
           // name , version, OS, device
           id: guacamoleId,
-          platform: osName,
-          family: family,
-          resolutions: browser.resolutions
+          family: family
         };
+
+        switch (osName){
+          case 'iOS':
+            // iOS is not a platform name, use OS X 10.10 instead
+            result.platform = 'OS X 10.10';
+            break;
+          case 'Android':
+            // Android is not a platform name, use Linux instead
+            result.platform = 'Linux';
+            break;
+          default:
+            result.platform = osName;
+            // only append resolution to none Android or iOS configuration
+            result.resolutions = browser.resolutions;
+            break;
+        }
 
         if (browser.automation_backend === "appium") {
           result["appium-version"] = browser.recommended_backend_version;
