@@ -25,22 +25,22 @@ describe("Windows version translations", function () {
 
   it("Finds Windows XP correctly", function () {
     var result = Browsers.get({ platform: "Windows XP" });
-    expect(result).to.have.length(65);
+    expect(result).to.have.length(68);
   });
 
   it("Finds Windows 7 correctly", function () {
     var result = Browsers.get({ platform: "Windows 7" });
-    expect(result).to.have.length(67);
+    expect(result).to.have.length(70);
   });
 
   it("Finds Windows 8 correctly", function () {
     var result = Browsers.get({ platform: "Windows 8" });
-    expect(result).to.have.length(61);
+    expect(result).to.have.length(64);
   });
 
   it("Finds Windows 8.1 correctly", function () {
     var result = Browsers.get({ platform: "Windows 8.1" });
-    expect(result).to.have.length(61);
+    expect(result).to.have.length(64);
   });
 
   it("Finds Windows XP browser ids correctly", function () {

@@ -43,7 +43,7 @@ describe("normalizer", function () {
     var chrome43 = result[0];
     expect(chrome43).to.have.property("browserName", "chrome");
     expect(chrome43).to.have.property("platform", "Windows 2012 R2");
-    expect(chrome43).to.have.property("version", "43");
+    expect(chrome43).to.have.property("version", "46");
     expect(chrome43).to.have.property("browserName", "chrome");
   });
 
