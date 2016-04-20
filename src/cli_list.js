@@ -3,7 +3,7 @@ var Table = require("cli-table");
 var clc = require("cli-color");
 var SauceBrowsers = require("./browsers");
 
-module.exports = function () {
+module.exports = function (callback) {
   console.log("Available Sauce Browsers:");
   var browsers = SauceBrowsers.filter(function () { return true; });
 
@@ -42,5 +42,7 @@ module.exports = function () {
     });
   });
 
-  console.log(table.toString());
+  if(callback){
+    callback(table);
+  }
 };
