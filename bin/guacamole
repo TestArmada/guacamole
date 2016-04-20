@@ -50,7 +50,9 @@ var cli = function () {
         console.log("Wrote guacamole shrinkwrap to " + shrinkwrapFilepath);
       });
     } else {
-      listBrowsers();
+      listBrowsers(function(browserTable){
+        console.log(browserTable.toString());
+      });
     }
   }
 };
