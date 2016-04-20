@@ -42,7 +42,5 @@ module.exports = function (callback) {
     });
   });
 
-  if(callback){
-    callback(table);
-  }
+  callback(table);
 };
