@@ -271,12 +271,7 @@ var SauceBrowsers = {
 
         if (browser.automation_backend === "appium") {
           hostOSName = browser.os;
-
-          if (name === "iOS") {
-            deviceName = browser.long_name.split("p").join("P") + " Simulator";
-          } else {
-            deviceName = browser.long_name;
-          }
+          deviceName = browser.long_name;
 
           if (browser.device.toLowerCase().indexOf("android") > -1) {
             osName = "Android";
