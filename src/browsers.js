@@ -293,26 +293,17 @@ var SauceBrowsers = {
             hostOSName = hostOSName.replace("Mac", "OS X");
           }
         } else {
-          deviceName = (browser.device ? browser.device : "Desktop");
+          // eg: device: "Nexus7C", long_name: "Google Nexus 7C Emulator"
+          deviceName = (browser.device ? browser.long_name : "Desktop");
           osName = browser.os;
 
-          // For a real device, don't translate to a simulator or emulator devicename
-          if (deviceName.toLowerCase().indexOf("device") === -1) {
-            if (deviceName.toLowerCase() == "ipad") {
-              deviceName = "iPad Simulator";
-              osName = "iOS";
-            }
-
-            if(deviceName.toLowerCase() == "iphone") {
-              deviceName = "iPhone Simulator";
-              osName = "iOS";
-            }
-
-            // note: name comes from api_name
-            if(name.toLowerCase() == "android") {
-              // eg: long_name: "Google Nexus 7C Emulator",
-              deviceName = browser.long_name;
-            }
+          // note: name comes from api_name
+          if (name == "ipad") {
+            osName = "iOS";
+          } else if (name == "iphone") {
+            osName = "iOS";
+          } else if (name == "android") {
+            osName = "Android";
           }
 
           if (osName.indexOf("Mac") === 0) {
