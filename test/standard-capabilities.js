@@ -67,7 +67,7 @@ describe("Standard", function() {
   });
 
   it("standardize saucelabs capabilities of android emulator using selenium", function() {
-    var id = "android_4_1_Linux_Samsung_Galaxy_S3_Emulator";
+    var id = "android_4_4_Android_Samsung_Galaxy_S3_Emulator";
     var result = Browsers.get({
       id: id
     }, true);
@@ -76,7 +76,7 @@ describe("Standard", function() {
     var target = result[0];
     expect(target.desiredCapabilities).to.have.property("browserName", "android");
     expect(target.desiredCapabilities).to.have.property("platform", "Linux");
-    expect(target.desiredCapabilities).to.have.property("version", "4.1");
+    expect(target.desiredCapabilities).to.have.property("version", "4.4");
     expect(target.desiredCapabilities).to.have.property("deviceName", "Samsung Galaxy S3 Emulator");
   });
 

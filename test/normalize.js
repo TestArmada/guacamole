@@ -40,11 +40,11 @@ describe("normalizer", function () {
     var result = Browsers.get({ id: id });
     expect(result).to.have.length(1);
 
-    var chrome43 = result[0];
-    expect(chrome43).to.have.property("browserName", "chrome");
-    expect(chrome43).to.have.property("platform", "Windows 2012 R2");
-    expect(chrome43).to.have.property("version", "46");
-    expect(chrome43).to.have.property("browserName", "chrome");
+    var chrome = result[0];
+    expect(chrome).to.have.property("browserName", "chrome");
+    expect(chrome).to.have.property("platform", "Windows 2012 R2");
+    expect(chrome).to.have.property("version", "54");
+    expect(chrome).to.have.property("browserName", "chrome");
   });
 
   it("sets resolution correctly", function () {
@@ -59,7 +59,7 @@ describe("normalizer", function () {
   });
 
   it("sets orientation correctly", function () {
-    var id = "ipad_8_0_iOS_iPad_Simulator";
+    var id = "ipad_8_4_iOS_iPad_Simulator";
     var result = Browsers.get({
       id: id, 
       deviceOrientation: "landscape"
