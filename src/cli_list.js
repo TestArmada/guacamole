@@ -15,7 +15,7 @@ module.exports = function (callback) {
   var maxCLIWidth = _.max(_.pluck(browsers, "id"), function (b) { return b.length; }).length + 5;
   var maxBrowserWidth = _.max(browsers.map(function (b) { return b.desiredCapabilities.browserName || "Native app"; }), function (b) { return b.length; }).length + 5;
   var maxVersionWidth = _.max(browsers.map(function (b) { return b.desiredCapabilities.version || b.desiredCapabilities.platformVersion; }), function (b) { return b.toString().length; }).length + 5;
-  var maxOSWidth = _.max(_.pluck(browsers, "desiredCapabilities.platform"), function (b) { return b.length; }).length + 5;
+  var maxOSWidth = _.max(browsers.map(function (b) { return b.desiredCapabilities.platform || b.desiredCapabilities.platformName; }), function (b) { return b.toString().length; }).length + 5;
   var maxDeviceWidth = _.max(_.map(browsers, function (b) {
     return b.desiredCapabilities.deviceName || "Desktop";
   }), function (b) { return b.length; }).length + 5;
@@ -35,7 +35,7 @@ module.exports = function (callback) {
         b.id,
         b.desiredCapabilities.browserName || "Native app",
         b.desiredCapabilities.version || b.desiredCapabilities.platformVersion,
-        b.desiredCapabilities.platform,
+        b.desiredCapabilities.platform || b.desiredCapabilities.platformName,
         (b.desiredCapabilities.deviceName ? clc.cyanBright(b.desiredCapabilities.deviceName) : "Desktop")
       ]);
       count++;
