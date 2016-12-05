@@ -1,0 +1,141 @@
+#!/usr/bin/env node
+"use strict";
+
+const vorpal = require("vorpal")();
+const util = require("util");
+const Promise = require("bluebird");
+const path = require("path");
+const _ = require("lodash");
+const guacamole = require(path.resolve(__dirname, "../src/browsers"));
+
+
+let browserInput = null;
+let versionInput = null;
+let platformInput = null;
+
+vorpal
+  .command("browser")
+  .action(function (args, cb) {
+    let self = this;
+
+    let promptPromise = function (opt) {
+      return new Promise(function (resolve, reject) {
+        self.prompt(opt, function (result) {
+          resolve(result);
+        });
+      });
+    };
+
+    return promptPromise({
+      type: "input",
+      name: "browser",
+      message: "> Which browser do you prefer? "
+    })
+      .then(function (result) {
+        self.log(util.format("Browser: %s", result.browser));
+        browserInput = result.browser;
+
+        return promptPromise({
+          type: "input",
+          name: "version",
+          message: "> Which version do you prefer? "
+        });
+      })
+      .then(function (result) {
+        self.log(util.format("Version: %s", result.version));
+        versionInput = result.version;
+
+        return promptPromise({
+          type: "input",
+          name: "platform",
+          message: "> Which platform do you prefer? "
+        })
+      })
+      .then(function (result) {
+        self.log(util.format("Platform: %s", result.platform));
+        platformInput = result.platform;
+        // search in guacamole with given criteria
+        self.log("> Generating sauce browser id...");
+
+        return guacamole.initialize();
+      })
+      .then(function () {
+        let candidates = guacamole.filter(function (capability) {
+          if (capability.desiredCapabilities.browserName) {
+            return browserInput.toLowerCase() === capability.desiredCapabilities.browserName.toLowerCase();
+          }
+
+          return false;
+        });
+
+        if (candidates.length === 0) {
+          let availabilities = _.uniq(_.map(guacamole.filter(function (capability) {
+            return !capability.desiredCapabilities.deviceName;
+          }), "desiredCapabilities.browserName")).join(",");
+
+          // prompt proper options for browser type
+          return new Promise.reject(
+            new Error(util.format("Browser %s doesn't exist, you can choose from [%s]", browserInput, availabilities)));
+        }
+
+        return new Promise.resolve(candidates);
+      })
+      .then(function (browsers) {
+        let candidates = browsers.filter(function (capability) {
+          if (capability.desiredCapabilities.version) {
+            return versionInput === capability.desiredCapabilities.version;
+          }
+
+          return false;
+        });
+
+        if (candidates.length === 0) {
+          let availabilities = _.uniq(_.map(guacamole.filter(function (capability) {
+            return !capability.desiredCapabilities.deviceName;
+          }), "desiredCapabilities.version")).join(",");
+
+          // prompt proper options for browser version
+          return new Promise.reject(
+            new Error(util.format("Version %s@%s doesn't exist, you can choose from [%s]", browserInput, versionInput, availabilities)));
+        }
+
+        return new Promise.resolve(candidates);
+      })
+      .then(function (browsers) {
+        let candidates = browsers.filter(function (capability) {
+          if (capability.desiredCapabilities.platform) {
+            return platformInput.toLowerCase() === capability.desiredCapabilities.platform.toLowerCase();
+          }
+
+          return false;
+        });
+
+        if (candidates.length === 0) {
+          let availabilities = _.uniq(_.map(guacamole.filter(function (capability) {
+            return !capability.desiredCapabilities.deviceName;
+          }), "desiredCapabilities.platform")).join(",");
+
+          // prompt proper options for platform
+          return new Promise.reject(
+            new Error(util.format("Platform %s for %s@%s doesn't exist, you can choose from [%s]", platformInput, browserInput, versionInput, availabilities)));
+        }
+
+        return new Promise.resolve(candidates);
+      })
+
+      .then(function (browsers) {
+        browsers.forEach(function (browser) {
+          self.log(util.format("> Use %s as your browser", browser.id));
+        });
+      })
+      .catch(function (err) {
+        self.log(">", err.message);
+      })
+      .finally(function () {
+        cb();
+      })
+  });
+
+vorpal
+  .delimiter("guacamole$")
+  .show();
