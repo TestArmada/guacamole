@@ -324,6 +324,47 @@ $ guacamole --id=chrome_43_Windows_8_1_Desktop
 ]
 ```
 
+### REPL
+
+Now Guacamole comes with a REPL (built on [vorpal](http://vorpal.js.org/)) for a better interactive user experience. To use it, simply do
+
+```
+./bin/guacamole-repl 
+``` 
+
+#### Basic usage
+
+```
+guacamole$ help
+
+  Commands:
+
+    help [command...]  Provides help for a given command.
+    exit               Exits application.
+    desktop            Get saucelabs id for desktop browsers
+    appium             Get saucelabs id for appium test
+    webkit             Get saucelabs id for mobile browsers
+
+guacamole$ desktop
+> Which browser do you prefer? Chrome
+Browser: Chrome
+> Which version do you prefer? 52
+Version: 52
+> Which platform do you prefer? windows
+Platform: windows
+> Generating sauce browser id...
+> Platform windows  for Chrome@52 doesn't exist, you can choose from [OS X 10.10,OS X 10.11,OS X 10.9,Windows 10,Windows 2008,Windows 2012,Windows 2012 R2]
+guacamole$ desktop
+> Which browser do you prefer? chrome
+Browser: chrome
+> Which version do you prefer? 52
+Version: 52
+> Which platform do you prefer? windows 2008
+Platform: windows 2008
+> Generating sauce browser id...
+> Use chrome_52_Windows_2008_Desktop as your browser
+```
+
 ## Licenses
 
 All code not otherwise specified is Copyright Wal-Mart Stores, Inc.
