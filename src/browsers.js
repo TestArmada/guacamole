@@ -1,3 +1,6 @@
+/* eslint no-trailing-spaces: 0, no-magic-numbers: 0, max-len: 0,
+  no-lonely-if: 0, complexity: 0 */
+"use strict";
 var Q = require("q");
 var _ = require("lodash");
 var request = require("request");
@@ -13,9 +16,9 @@ var cleanPlatformName = function (str) { return str.split(" ").join("_").split("
 // are configurable via the web-based platform configurator. The
 // following are SauceLabs's internal substitutions for Windows OSes.
 var OS_TRANSLATIONS = {
-  "Windows XP":  "Windows 2003",     // Windows 2003 R2
-  "Windows 7":   "Windows 2008",     // Windows 2008 R2
-  "Windows 8":   "Windows 2012",     // Windows Server 2012
+  "Windows XP": "Windows 2003",     // Windows 2003 R2
+  "Windows 7": "Windows 2008",     // Windows 2008 R2
+  "Windows 8": "Windows 2012",     // Windows Server 2012
   "Windows 8.1": "Windows 2012 R2"   // Windows Server 2012 R2
 };
 
@@ -32,7 +35,7 @@ var SauceBrowsers = {
 
     "platform",             // i.e.: "OS X 10.10"
                             // NOTE:
-                            // We perform some transformations from the listing API to 
+                            // We perform some transformations from the listing API to
                             // sauce's device capabilities API, i.e.: "Mac 10.10" -> "OS X 10.10".
 
     "deviceName",           // i.e: "Samsung Galaxy S5 Device".
@@ -58,7 +61,7 @@ var SauceBrowsers = {
   ],
 
   // NOTE: The URL https://saucelabs.com/rest/v1/info/platforms/webdriver has this
-  // information, but not the available resolutions. That's why we go to the endpoint 
+  // information, but not the available resolutions. That's why we go to the endpoint
   // with the much larger set of options (+ automation backends) and then filter down.
   SAUCE_URL: "https://saucelabs.com/rest/v1/info/platforms/all?resolutions=true",
   _haveCachedSauceBrowsers: false,
@@ -181,25 +184,25 @@ var SauceBrowsers = {
           result.screenResolution = specs.screenResolution;
         }
       }
-      
+
       // clean up capabilities here, only deal with saucelabs wrap here
       if (wrapped) {
-        if(result.desiredCapabilities['appiumVersion'] || result.desiredCapabilities['appium-version']){
+        if (result.desiredCapabilities.appiumVersion || result.desiredCapabilities["appium-version"]) {
           // if using appium, use safari as browser for iOS
-          if(result.desiredCapabilities.platformName === 'iOS'){
-            result.desiredCapabilities.browserName = 'Safari';
+          if (result.desiredCapabilities.platformName === "iOS") {
+            result.desiredCapabilities.browserName = "Safari";
           }
-        }else{
-          if(result.desiredCapabilities.platform === 'iOS'){
+        } else {
+          if (result.desiredCapabilities.platform === "iOS") {
             // iOS is not platform name, use OS X 10.10 instead
-            result.desiredCapabilities.platform = 'OS X 10.10';
-          }else if(result.desiredCapabilities.platform === 'Android'){
+            result.desiredCapabilities.platform = "OS X 10.10";
+          } else if (result.desiredCapabilities.platform === "Android") {
             // Android is not platform name, use linux instead
-            result.desiredCapabilities.platform = 'Linux';
+            result.desiredCapabilities.platform = "Linux";
           }
         }
       }
-      
+
       return result;
     });
   },
@@ -213,6 +216,7 @@ var SauceBrowsers = {
       .map(function (browser) {
         // Name and Family
         var name;
+        var family;
 
         if (browser.automation_backend === "appium") {
           if (browser.device.toLowerCase().indexOf("android") > -1) {
@@ -241,7 +245,6 @@ var SauceBrowsers = {
             name = "IE";
           }
 
-          var family;
           if (name === "IE") {
             family = "IE";
           } else if (name.indexOf("android") === 0) {
@@ -293,23 +296,23 @@ var SauceBrowsers = {
             hostOSName = hostOSName.replace("Mac", "OS X");
           }
         } else {
-          deviceName = (browser.device ? browser.device : "Desktop");
+          deviceName = browser.device ? browser.device : "Desktop";
           osName = browser.os;
 
           // For a real device, don't translate to a simulator or emulator devicename
           if (deviceName.toLowerCase().indexOf("device") === -1) {
-            if (deviceName.toLowerCase() == "ipad") {
+            if (deviceName.toLowerCase() === "ipad") {
               deviceName = "iPad Simulator";
               osName = "iOS";
             }
 
-            if(deviceName.toLowerCase() == "iphone") {
+            if (deviceName.toLowerCase() === "iphone") {
               deviceName = "iPhone Simulator";
               osName = "iOS";
             }
 
             // note: name comes from api_name
-            if(name.toLowerCase() == "android") {
+            if (name.toLowerCase() === "android") {
               // eg: long_name: "Google Nexus 7C Emulator",
               deviceName = browser.long_name;
             }
@@ -323,30 +326,26 @@ var SauceBrowsers = {
         var guacamoleId;
 
         if (browser.automation_backend === "appium") {
-          guacamoleId = (
-            cleanPlatformName(deviceName)
+          guacamoleId = cleanPlatformName(deviceName)
             + "_" + cleanPlatformName(osName)
             + "_" + cleanPlatformName(browser.short_version)
-            + "_" + cleanPlatformName(hostOSName)
-          )
+            + "_" + cleanPlatformName(hostOSName);
         } else {
           var osKey = cleanPlatformName(osName) + "_" + cleanPlatformName(deviceName);
-          guacamoleId = (
-            cleanPlatformName(name)
+          guacamoleId = cleanPlatformName(name)
             + "_" + cleanPlatformName(browser.short_version)
-            + "_" + osKey
-          );
+            + "_" + osKey;
 
           if (!latest[browser.api_name]) {
             latest[browser.api_name] = {};
           }
 
-          if(!latest[browser.api_name][osKey] || latest[browser.api_name][osKey] < browser.short_version) {
+          if (!latest[browser.api_name][osKey] || latest[browser.api_name][osKey] < browser.short_version) {
             latest[browser.api_name][osKey] = parseInt(browser.short_version, 10);
           }
         }
 
-        var result = {
+        result = {
           // name , version, OS, device
           id: guacamoleId,
           platform: osName,
@@ -385,7 +384,7 @@ var SauceBrowsers = {
 
         return result;
       }).map(function (browser) {
-        var result = {
+        result = {
           id: browser.id,
           family: browser.family,
           resolutions: browser.resolutions,
@@ -459,7 +458,6 @@ var SauceBrowsers = {
   },
 
   addNormalizedBrowsersFromFile: function (filePath) {
-    var self = this;
     filePath = path.resolve(filePath);
     try {
       var data = JSON.parse(fs.readFileSync(filePath, "utf8"));
