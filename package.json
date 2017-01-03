@@ -23,19 +23,19 @@
   "dependencies": {
     "cli-color": "^1.0.0",
     "cli-table": "^0.3.1",
-    "lodash": "^3.9.3",
+    "lodash": "^4.17.2",
     "q": "^1.4.1",
     "request": "^2.58.0",
-    "sync-request": "^2.0.1",
+    "sync-request": "^3.0.1",
     "vorpal": "^1.11.4",
-    "yargs": "^3.14.0"
+    "yargs": "^6.5.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "eslint": "^1.10.3",
     "eslint-config-defaults": "^8.0.2",
     "eslint-plugin-filenames": "^0.2.0",
-    "mocha": "^2.2.4"
+    "mocha": "^3.2.0"
   },
   "bin": {
     "guacamole": "./bin/guacamole"
