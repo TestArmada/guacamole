@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+"use strict";
+/* eslint no-lonely-if: 0, no-process-exit: 0 */
 
 var argv = require("yargs").argv;
 var browsers = require("../src/browsers");
@@ -12,7 +14,8 @@ var request = require("request");
 var fields = [].concat(browsers.CAPABILITY_FIELDS, browsers.INTERNAL_FIELDS);
 
 var cli = function () {
-  // Filter by fields because we don't want to accidentally use stuff like --help as a desiredCapabilities filter
+  // Filter by fields because we don't want to accidentally use
+  // stuff like --help as a desiredCapabilities filter
   var specs = {};
   fields.forEach(function (field) {
     if (argv[field]) {
@@ -29,17 +32,21 @@ var cli = function () {
     }
   } else {
     if (argv.help) {
-      console.log("Matching options: ")
+      console.log("Matching options: ");
       fields.forEach(function (field) {
         console.log("  --" + field + "=xxxxx");
       });
       console.log("Other Options:");
-      console.log("  --generate-shrinkwrap       Cache a SauceLabs browser API result and store it to disk");
-      console.log("  --shrinkwrap                Use the stored shrinkwrap when performing queries (skip network)");
+      console.log(
+        "  --generate-shrinkwrap       " +
+        "Cache a SauceLabs browser API result and store it to disk");
+      console.log(
+        "  --shrinkwrap                " +
+        "Use the stored shrinkwrap when performing queries (skip network)");
       console.log("  --shrinkwrap=path/to/file   Use a specific shrinkwrap file");
       console.log(project.name + " v" + project.version);
     } else if (argv["generate-shrinkwrap"]) {
-      var file = fs.createWriteStream(shrinkwrapFilepath);
+      fs.createWriteStream(shrinkwrapFilepath);
       request(browsers.SAUCE_URL, function (err, response) {
         if (err) {
           console.log("Could not fetch sauce data from API at " + browsers.SAUCE_URL);
@@ -50,7 +57,7 @@ var cli = function () {
         console.log("Wrote guacamole shrinkwrap to " + shrinkwrapFilepath);
       });
     } else {
-      listBrowsers(function(browserTable){
+      listBrowsers(function (browserTable) {
         console.log(browserTable.toString());
       });
     }

@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0, no-undef: 0 */
+"use strict";
 var Browsers = require("../src/browsers");
 var Q = require("q");
 var fs = require("fs");
