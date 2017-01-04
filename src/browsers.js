@@ -343,7 +343,7 @@ var SauceBrowsers = {
           result.platformVersion = browser.short_version;
           result.platformName = osName;
         } else {
-          result.platform = osName,
+          result.platform = osName;
           result.browserName = browser.api_name;
           result.version = browser.short_version;
 
