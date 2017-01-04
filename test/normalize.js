@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0, no-undef: 0 */
+"use strict";
 var Browsers = require("../src/browsers");
 var Q = require("q");
 var fs = require("fs");
@@ -6,7 +8,8 @@ var path = require("path");
 
 var expect = chai.expect;
 
-var cachedBrowsers = JSON.parse(fs.readFileSync(path.resolve("./test_support/cached_sauce_api_result.json"), "utf8"));
+var cachedBrowsers = JSON.parse(
+  fs.readFileSync(path.resolve("./test_support/cached_sauce_api_result.json"), "utf8"));
 
 describe("normalizer", function () {
 
@@ -61,7 +64,7 @@ describe("normalizer", function () {
   it("sets orientation correctly", function () {
     var id = "ipad_8_4_iOS_iPad_Simulator";
     var result = Browsers.get({
-      id: id, 
+      id: id,
       deviceOrientation: "landscape"
     });
     expect(result).to.have.length(1);
