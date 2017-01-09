@@ -1,27 +1,25 @@
 #!/usr/bin/env node
 "use strict";
-/* eslint filenames/filenames: 0, no-invalid-this: 0, new-cap: 0, no-magic-numbers: 0 */
+/* eslint filenames/filenames: 0, new-cap: 0, no-magic-numbers: 0 */
 
-var vorpal = require("vorpal")();
-var util = require("util");
-var Promise = require("bluebird");
-var path = require("path");
-var _ = require("lodash");
-var guacamole = require(path.resolve(__dirname, "../src/browsers"));
+const vorpal = require("vorpal")();
+const util = require("util");
+const Promise = require("bluebird");
+const path = require("path");
+const _ = require("lodash");
+const guacamole = require(path.resolve(__dirname, "../src/browsers"));
 
-var browserInput = null;
-var versionInput = null;
-var platformInput = null;
-var deviceNameInput = null;
+let browserInput = null;
+let versionInput = null;
+let platformInput = null;
+let deviceNameInput = null;
 
 vorpal
   .command("desktop", "Get saucelabs id for desktop browsers")
-  .action(function (args, cb) {
-    var self = this;
-
-    var promptPromise = function (opt) {
-      return new Promise(function (resolve) {
-        self.prompt(opt, function (result) {
+  .action((args, cb) => {
+    const promptPromise = (opt) => {
+      return new Promise((resolve) => {
+        vorpal.prompt(opt, (result) => {
           resolve(result);
         });
       });
@@ -32,8 +30,8 @@ vorpal
       name: "browser",
       message: "> Which browser do you prefer? "
     })
-      .then(function (result) {
-        self.log(util.format("Browser: %s", result.browser));
+      .then((result) => {
+        vorpal.log(util.format("Browser: %s", result.browser));
         browserInput = result.browser;
 
         return promptPromise({
@@ -42,8 +40,8 @@ vorpal
           message: "> Which version do you prefer? "
         });
       })
-      .then(function (result) {
-        self.log(util.format("Version: %s", result.version));
+      .then((result) => {
+        vorpal.log(util.format("Version: %s", result.version));
         versionInput = result.version;
 
         return promptPromise({
@@ -52,16 +50,16 @@ vorpal
           message: "> Which platform do you prefer? "
         });
       })
-      .then(function (result) {
-        self.log(util.format("Platform: %s", result.platform));
+      .then((result) => {
+        vorpal.log(util.format("Platform: %s", result.platform));
         platformInput = result.platform;
         // search in guacamole with given criteria
-        self.log("> Generating sauce browser id...");
+        vorpal.log("> Generating sauce browser id...");
 
         return guacamole.initialize();
       })
-      .then(function () {
-        var candidates = guacamole.filter(function (capability) {
+      .then(() => {
+        const candidates = guacamole.filter((capability) => {
           if (capability.desiredCapabilities.browserName) {
             return browserInput.toLowerCase() ===
               capability.desiredCapabilities.browserName.toLowerCase();
@@ -71,7 +69,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(guacamole.filter(function (capability) {
+          const availabilities = _.uniq(_.map(guacamole.filter((capability) => {
             return !capability.desiredCapabilities.deviceName;
           }), "desiredCapabilities.browserName")).join(",");
 
@@ -83,8 +81,8 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (browsers) {
-        var candidates = browsers.filter(function (capability) {
+      .then((browsers) => {
+        const candidates = browsers.filter((capability) => {
           if (capability.desiredCapabilities.version) {
             return versionInput === capability.desiredCapabilities.version;
           }
@@ -93,7 +91,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(browsers, "desiredCapabilities.version")).join(",");
+          const availabilities = _.uniq(_.map(browsers, "desiredCapabilities.version")).join(",");
 
           // prompt proper options for browser version
           return new Promise.reject(
@@ -103,8 +101,8 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (browsers) {
-        var candidates = browsers.filter(function (capability) {
+      .then((browsers) => {
+        const candidates = browsers.filter((capability) => {
           if (capability.desiredCapabilities.platform) {
             return platformInput.toLowerCase() ===
               capability.desiredCapabilities.platform.toLowerCase();
@@ -114,7 +112,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(browsers, "desiredCapabilities.platform")).join(",");
+          const availabilities = _.uniq(_.map(browsers, "desiredCapabilities.platform")).join(",");
 
           // prompt proper options for platform
           return new Promise.reject(
@@ -125,15 +123,15 @@ vorpal
         return new Promise.resolve(candidates);
       })
 
-      .then(function (browsers) {
-        browsers.forEach(function (browser) {
-          self.log(util.format("> Use %s as your browser", browser.id));
+      .then((browsers) => {
+        browsers.forEach((browser) => {
+          vorpal.log(util.format("> Use %s as your browser", browser.id));
         });
       })
-      .catch(function (err) {
-        self.log(">", err.message);
+      .catch((err) => {
+        vorpal.log(">", err.message);
       })
-      .finally(function () {
+      .finally(() => {
         deviceNameInput = null;
         browserInput = null;
         versionInput = null;
@@ -144,12 +142,10 @@ vorpal
 
 vorpal
   .command("appium", "Get saucelabs id for appium test")
-  .action(function (args, cb) {
-    var self = this;
-
-    var promptPromise = function (opt) {
-      return new Promise(function (resolve) {
-        self.prompt(opt, function (result) {
+  .action((args, cb) => {
+    const promptPromise = (opt) => {
+      return new Promise((resolve) => {
+        vorpal.prompt(opt, (result) => {
           resolve(result);
         });
       });
@@ -160,8 +156,8 @@ vorpal
       name: "platform",
       message: "> Which platform do you prefer? "
     })
-      .then(function (result) {
-        self.log(util.format("Platform: %s", result.platform));
+      .then((result) => {
+        vorpal.log(util.format("Platform: %s", result.platform));
         platformInput = result.platform;
 
         return promptPromise({
@@ -170,8 +166,8 @@ vorpal
           message: "> Which version do you prefer? "
         });
       })
-      .then(function (result) {
-        self.log(util.format("Version: %s", result.version));
+      .then((result) => {
+        vorpal.log(util.format("Version: %s", result.version));
         versionInput = result.version;
 
         return promptPromise({
@@ -180,23 +176,23 @@ vorpal
           message: "> Which device name do you prefer? "
         });
       })
-      .then(function (result) {
-        self.log(util.format("Device name: %s", result.name));
+      .then((result) => {
+        vorpal.log(util.format("Device name: %s", result.name));
         deviceNameInput = result.name;
         // search in guacamole with given criteria
-        self.log("> Generating sauce appium id...");
+        vorpal.log("> Generating sauce appium id...");
 
         return guacamole.initialize();
       })
-      .then(function () {
-        var candidates = guacamole.filter(function (capability) {
+      .then(() => {
+        const candidates = guacamole.filter((capability) => {
           return !!capability.desiredCapabilities["appium-version"];
         });
 
         return Promise.resolve(candidates);
       })
-      .then(function (devices) {
-        var candidates = devices.filter(function (capability) {
+      .then((devices) => {
+        const candidates = devices.filter((capability) => {
           if (capability.desiredCapabilities.platform) {
             return platformInput.toLowerCase() ===
               capability.desiredCapabilities.platform.toLowerCase();
@@ -206,7 +202,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(devices, "desiredCapabilities.platform")).join(",");
+          const availabilities = _.uniq(_.map(devices, "desiredCapabilities.platform")).join(",");
 
           // prompt proper options for browser type
           return new Promise.reject(
@@ -216,8 +212,8 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (devices) {
-        var candidates = devices.filter(function (capability) {
+      .then((devices) => {
+        const candidates = devices.filter((capability) => {
           if (capability.desiredCapabilities.platformVersion) {
             return versionInput === capability.desiredCapabilities.platformVersion;
           }
@@ -226,7 +222,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(devices, "desiredCapabilities.platformVersion"))
+          const availabilities = _.uniq(_.map(devices, "desiredCapabilities.platformVersion"))
             .join(",");
 
           // prompt proper options for browser version
@@ -237,8 +233,8 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (devices) {
-        var candidates = devices.filter(function (capability) {
+      .then((devices) => {
+        const candidates = devices.filter((capability) => {
           if (capability.desiredCapabilities.platform) {
             return capability.desiredCapabilities.deviceName.toLowerCase()
               .indexOf(deviceNameInput.toLowerCase()) > -1;
@@ -248,7 +244,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(devices, "desiredCapabilities.deviceName")).join(",");
+          const availabilities = _.uniq(_.map(devices, "desiredCapabilities.deviceName")).join(",");
 
           // prompt proper options for device name
           return new Promise.reject(
@@ -260,15 +256,15 @@ vorpal
         return new Promise.resolve(candidates);
       })
 
-      .then(function (browsers) {
-        browsers.forEach(function (browser) {
-          self.log(util.format("> Use %s as your appium id", browser.id));
+      .then((browsers) => {
+        browsers.forEach((browser) => {
+          vorpal.log(util.format("> Use %s as your appium id", browser.id));
         });
       })
-      .catch(function (err) {
-        self.log(">", err.message);
+      .catch((err) => {
+        vorpal.log(">", err.message);
       })
-      .finally(function () {
+      .finally(() => {
         deviceNameInput = null;
         browserInput = null;
         versionInput = null;
@@ -279,12 +275,10 @@ vorpal
 
 vorpal
   .command("webkit", "Get saucelabs id for mobile browsers")
-  .action(function (args, cb) {
-    var self = this;
-
-    var promptPromise = function (opt) {
-      return new Promise(function (resolve) {
-        self.prompt(opt, function (result) {
+  .action((args, cb) => {
+    const promptPromise = (opt) => {
+      return new Promise((resolve) => {
+        vorpal.prompt(opt, (result) => {
           resolve(result);
         });
       });
@@ -295,8 +289,8 @@ vorpal
       name: "name",
       message: "> Which device name do you prefer? "
     })
-      .then(function (result) {
-        self.log(util.format("Device name: %s", result.name));
+      .then((result) => {
+        vorpal.log(util.format("Device name: %s", result.name));
         deviceNameInput = result.name;
 
         return promptPromise({
@@ -305,25 +299,25 @@ vorpal
           message: "> Which os version do you prefer? "
         });
       })
-      .then(function (result) {
-        self.log(util.format("Version: %s", result.version));
+      .then((result) => {
+        vorpal.log(util.format("Version: %s", result.version));
         versionInput = result.version;
 
 
-        self.log("> Generating sauce appium id...");
+        vorpal.log("> Generating sauce appium id...");
 
         return guacamole.initialize();
       })
-      .then(function () {
-        var candidates = guacamole.filter(function (capability) {
+      .then(() => {
+        const candidates = guacamole.filter((capability) => {
           return !capability.desiredCapabilities["appium-version"]
             && capability.desiredCapabilities.deviceName;
         });
 
         return Promise.resolve(candidates);
       })
-      .then(function (devices) {
-        var candidates = devices.filter(function (capability) {
+      .then((devices) => {
+        const candidates = devices.filter((capability) => {
           if (capability.desiredCapabilities.deviceName) {
             return capability.desiredCapabilities.deviceName.toLowerCase()
               .indexOf(deviceNameInput.toLowerCase()) > -1;
@@ -333,7 +327,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(devices, "desiredCapabilities.deviceName")).join(",");
+          const availabilities = _.uniq(_.map(devices, "desiredCapabilities.deviceName")).join(",");
 
           // prompt proper options for browser type
           return new Promise.reject(
@@ -343,8 +337,8 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (devices) {
-        var candidates = devices.filter(function (capability) {
+      .then((devices) => {
+        const candidates = devices.filter((capability) => {
           if (capability.desiredCapabilities.version) {
             return versionInput === capability.desiredCapabilities.version;
           }
@@ -353,7 +347,7 @@ vorpal
         });
 
         if (candidates.length === 0) {
-          var availabilities = _.uniq(_.map(devices, "desiredCapabilities.version")).join(",");
+          const availabilities = _.uniq(_.map(devices, "desiredCapabilities.version")).join(",");
 
           // prompt proper options for browser version
           return new Promise.reject(
@@ -363,15 +357,15 @@ vorpal
 
         return new Promise.resolve(candidates);
       })
-      .then(function (browsers) {
-        browsers.forEach(function (browser) {
-          self.log(util.format("> Use %s as your appium id", browser.id));
+      .then((browsers) => {
+        browsers.forEach((browser) => {
+          vorpal.log(util.format("> Use %s as your appium id", browser.id));
         });
       })
-      .catch(function (err) {
-        self.log(">", err.message);
+      .catch((err) => {
+        vorpal.log(">", err.message);
       })
-      .finally(function () {
+      .finally(() => {
         deviceNameInput = null;
         browserInput = null;
         versionInput = null;

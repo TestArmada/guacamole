@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 "use strict";
-/* eslint no-lonely-if: 0, no-process-exit: 0 */
+/* eslint no-lonely-if: 0, no-process-exit: 0, no-console: 0, no-magic-numbers: 0 */
 
-var argv = require("yargs").argv;
-var browsers = require("../src/browsers");
-var listBrowsers = require("../src/cli_list");
-var project = require("../package.json");
-var fs = require("fs");
-var path = require("path");
-var shrinkwrapFilepath = path.resolve("./guacamole-shrinkwrap.json");
-var request = require("request");
+const argv = require("yargs").argv;
+const browsers = require("../src/browsers");
+const listBrowsers = require("../src/cli_list");
+const project = require("../package.json");
+const fs = require("fs");
+const path = require("path");
+const shrinkwrapFilepath = path.resolve("./guacamole-shrinkwrap.json");
+const request = require("request");
 
-var fields = [].concat(browsers.CAPABILITY_FIELDS, browsers.INTERNAL_FIELDS);
+const fields = [].concat(browsers.CAPABILITY_FIELDS, browsers.INTERNAL_FIELDS);
 
-var cli = function () {
+const cli = () => {
   // Filter by fields because we don't want to accidentally use
   // stuff like --help as a desiredCapabilities filter
-  var specs = {};
-  fields.forEach(function (field) {
+  const specs = {};
+  fields.forEach((field) => {
     if (argv[field]) {
       specs[field] = argv[field];
     }
   });
 
   if (Object.keys(specs).length > 0) {
-    var result = browsers.get(specs);
+    const result = browsers.get(specs);
     if (result && result.length > 0) {
       console.log(JSON.stringify(result, null, 2));
     } else {
@@ -33,8 +33,8 @@ var cli = function () {
   } else {
     if (argv.help) {
       console.log("Matching options: ");
-      fields.forEach(function (field) {
-        console.log("  --" + field + "=xxxxx");
+      fields.forEach((field) => {
+        console.log(`  --${field}=xxxxx`);
       });
       console.log("Other Options:");
       console.log(
@@ -44,20 +44,20 @@ var cli = function () {
         "  --shrinkwrap                " +
         "Use the stored shrinkwrap when performing queries (skip network)");
       console.log("  --shrinkwrap=path/to/file   Use a specific shrinkwrap file");
-      console.log(project.name + " v" + project.version);
+      console.log(`${project.name} v${project.version}`);
     } else if (argv["generate-shrinkwrap"]) {
       fs.createWriteStream(shrinkwrapFilepath);
-      request(browsers.SAUCE_URL, function (err, response) {
+      request(browsers.SAUCE_URL, (err, response) => {
         if (err) {
-          console.log("Could not fetch sauce data from API at " + browsers.SAUCE_URL);
+          console.log(`Could not fetch sauce data from API at ${browsers.SAUCE_URL}`);
           process.exit(1);
           return;
         }
         fs.writeFileSync(shrinkwrapFilepath, JSON.stringify(JSON.parse(response.body), null, 2));
-        console.log("Wrote guacamole shrinkwrap to " + shrinkwrapFilepath);
+        console.log(`Wrote guacamole shrinkwrap to ${shrinkwrapFilepath}`);
       });
     } else {
-      listBrowsers(function (browserTable) {
+      listBrowsers((browserTable) => {
         console.log(browserTable.toString());
       });
     }
@@ -78,13 +78,13 @@ if (argv.shrinkwrap) {
   cli();
 } else {
   browsers.initialize()
-    .then(function () {
+    .then(() => {
       if (typeof argv.device_additions === "string" && argv.device_additions.length > 0) {
         browsers.addNormalizedBrowsersFromFile(argv.device_additions);
       }
     })
     .then(cli)
-    .catch(function (err) {
+    .catch((err) => {
       console.log("error:", err);
     });
 }
