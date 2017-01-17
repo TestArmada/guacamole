@@ -26,9 +26,10 @@ describe("Appium Devices", () => {
     });
   });
 
+
   it("Finds an iPhone with iOS 8.2 Correctly (with multiple host OSes)", () => {
     const result = Browsers.get({
-      "platform": "iOS",
+      "platformName": "iOS",
       "platformVersion": "8.2",
       "deviceName": "iPhone Simulator"
     });
@@ -37,7 +38,7 @@ describe("Appium Devices", () => {
 
   it("Finds a Google Nexus 7", () => {
     const result = Browsers.get({
-      "platform": "Android",
+      "platformName": "Android",
       "platformVersion": "4.4",
       "deviceName": "Google Nexus 7 HD Emulator"
     });

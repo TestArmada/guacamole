@@ -43,11 +43,11 @@ describe("normalizer", () => {
     const result = Browsers.get({ id });
     expect(result).to.have.length(1);
 
-    const chrome43 = result[0];
-    expect(chrome43).to.have.property("browserName", "chrome");
-    expect(chrome43).to.have.property("platform", "Windows 2012 R2");
-    expect(chrome43).to.have.property("version", "46");
-    expect(chrome43).to.have.property("browserName", "chrome");
+    const chrome54 = result[0];
+    expect(chrome54).to.have.property("browserName", "chrome");
+    expect(chrome54).to.have.property("platform", "Windows 2012 R2");
+    expect(chrome54).to.have.property("version", "54");
+    expect(chrome54).to.have.property("browserName", "chrome");
   });
 
   it("sets resolution correctly", () => {
@@ -62,7 +62,7 @@ describe("normalizer", () => {
   });
 
   it("sets orientation correctly", () => {
-    const id = "ipad_8_0_iOS_iPad_Simulator";
+    const id = "ipad_8_4_iOS_iPad_Simulator";
     const result = Browsers.get({
       id,
       deviceOrientation: "landscape"
