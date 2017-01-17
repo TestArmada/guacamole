@@ -72,7 +72,7 @@ describe("Standard", () => {
   it("standardize saucelabs capabilities of android emulator using selenium", () => {
     const id = "android_4_4_Android_Samsung_Galaxy_S3_Emulator";
     const result = Browsers.get({
-      id: id
+      id
     }, true);
     expect(result).to.have.length(1);
 
