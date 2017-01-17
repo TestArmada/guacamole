@@ -331,7 +331,7 @@ const SauceBrowsers = {
         const result = {
           // name , version, OS, device
           id: guacamoleId,
-          family: family,
+          family,
           resolutions: browser.resolutions
         };
 
