@@ -43,7 +43,7 @@ describe("normalizer", () => {
     const result = Browsers.get({ id });
     expect(result).to.have.length(1);
 
-    var chrome54 = result[0];
+    const chrome54 = result[0];
     expect(chrome54).to.have.property("browserName", "chrome");
     expect(chrome54).to.have.property("platform", "Windows 2012 R2");
     expect(chrome54).to.have.property("version", "54");
@@ -64,7 +64,7 @@ describe("normalizer", () => {
   it("sets orientation correctly", () => {
     const id = "ipad_8_4_iOS_iPad_Simulator";
     const result = Browsers.get({
-      id: id,
+      id,
       deviceOrientation: "landscape"
     });
     expect(result).to.have.length(1);
