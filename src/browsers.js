@@ -1,33 +1,33 @@
 /* eslint no-trailing-spaces: 0, no-magic-numbers: 0, max-len: 0,
-  no-lonely-if: 0, complexity: 0 */
+  no-lonely-if: 0, complexity: 0, prefer-template: 0 */
 "use strict";
-var Q = require("q");
-var _ = require("lodash");
-var request = require("request");
-var syncRequest = require("sync-request");
-var browsers = [];
-var latest = {};
-var fs = require("fs");
-var path = require("path");
+const Q = require("q");
+const _ = require("lodash");
+const request = require("request");
+const syncRequest = require("sync-request");
+let browsers = [];
+const latest = {};
+const fs = require("fs");
+const path = require("path");
 
-var cleanPlatformName = function (str) { return str.split(" ").join("_").split(".").join("_"); };
+const cleanPlatformName = (str) => str.split(" ").join("_").split(".").join("_");
 
 // SauceLabs leaves certain OSes out of its REST API, but these
 // are configurable via the web-based platform configurator. The
 // following are SauceLabs's internal substitutions for Windows OSes.
-var OS_TRANSLATIONS = {
+const OS_TRANSLATIONS = {
   "Windows XP": "Windows 2003",     // Windows 2003 R2
   "Windows 7": "Windows 2008",     // Windows 2008 R2
   "Windows 8": "Windows 2012",     // Windows Server 2012
   "Windows 8.1": "Windows 2012 R2"   // Windows Server 2012 R2
 };
 
-var OS_TRANSLATIONS_FROM_ID = {};
-Object.keys(OS_TRANSLATIONS).forEach(function (name) {
+const OS_TRANSLATIONS_FROM_ID = {};
+Object.keys(OS_TRANSLATIONS).forEach((name) => {
   OS_TRANSLATIONS_FROM_ID[cleanPlatformName(name)] = OS_TRANSLATIONS[name];
 });
 
-var SauceBrowsers = {
+const SauceBrowsers = {
 
   CAPABILITY_FIELDS: [
     "browserName",          // i.e.: "firefox", "chrome", but also (strangely) "android"
@@ -66,11 +66,9 @@ var SauceBrowsers = {
   SAUCE_URL: "https://saucelabs.com/rest/v1/info/platforms/all?resolutions=true",
   _haveCachedSauceBrowsers: false,
 
-  filter: function (fn) {
-    return browsers.filter(fn);
-  },
+  filter: (fn) => browsers.filter(fn),
 
-  latest: latest,
+  latest,
 
   // Return a list of browser desiredCapabilities objects if they exist in our browser list.
   //
@@ -87,32 +85,32 @@ var SauceBrowsers = {
   // If wrapped is true, return a wrapper object within which a desiredCapabilities object can be found, along
   // with id, family, and a supported resolutions array (i.e. guacamole's raw internal representation)
   //
-  get: function (specs, wrapped) {
+  get: (specs, wrapped) => {
 
     if (specs.id && specs.id.indexOf("latest") > -1) {
-      var splitId = specs.id.split("latest");
+      const splitId = specs.id.split("latest");
       if (splitId.length === 2) {
-        var browserId = splitId[0].replace("_", "");
-        var osId = splitId[1].replace("_", "");
+        const browserId = splitId[0].replace("_", "");
+        const osId = splitId[1].replace("_", "");
         if (latest[browserId] && latest[browserId][osId]) {
-          var latestVersion = latest[browserId][osId];
-          var newId = splitId[0] + latestVersion + splitId[1];
+          const latestVersion = latest[browserId][osId];
+          const newId = splitId[0] + latestVersion + splitId[1];
           specs.id = newId;
         }
       }
     }
 
-    return browsers.filter(function (browser) {
+    return browsers.filter((browser) => {
       // Match specs. Ignore orientation, and special case screenResolution
-      var matching = true;
+      let matching = true;
       // Match by id (only if id has been specified)
       if (specs.id && browser.id !== specs.id) {
-        var matchesTranslated = false;
+        let matchesTranslated = false;
         // Check if we've asked for a browser that isn't in the matrix, but would be if
         // SauceLabs had any of the OSes in OS_TRANSLATIONS.
-        Object.keys(OS_TRANSLATIONS_FROM_ID).forEach(function (otherPlatformId) {
+        Object.keys(OS_TRANSLATIONS_FROM_ID).forEach((otherPlatformId) => {
           // Check if the translated specs.id matches this browser
-          var translatedPlatformName = OS_TRANSLATIONS_FROM_ID[otherPlatformId];
+          const translatedPlatformName = OS_TRANSLATIONS_FROM_ID[otherPlatformId];
           if (browser.id === specs.id.replace(cleanPlatformName(otherPlatformId), cleanPlatformName(translatedPlatformName))) {
             matchesTranslated = true;
           }
@@ -137,8 +135,8 @@ var SauceBrowsers = {
       }
 
       // Match by properties from the desiredCapabilities object. Ignore certain field names.
-      var ignoreFields = ["id", "family", "screenResolution", "deviceOrientation"];
-      SauceBrowsers.CAPABILITY_FIELDS.forEach(function (field) {
+      const ignoreFields = ["id", "family", "screenResolution", "deviceOrientation"];
+      SauceBrowsers.CAPABILITY_FIELDS.forEach((field) => {
         // Disqualify with a given field only if we've specified an explicit value for it
         if (ignoreFields.indexOf(field) === -1 && specs[field]) {
           // Special case: if we've specified platform, we check against the asked-for value,
@@ -146,7 +144,7 @@ var SauceBrowsers = {
           if (field === "platform") {
             // If we're looking for an OS that has a weird name translation API-side,
             // allow a match to the translated version
-            var translation = OS_TRANSLATIONS[specs[field]];
+            const translation = OS_TRANSLATIONS[specs[field]];
             if (browser.desiredCapabilities.platform !== translation
               && browser.desiredCapabilities.platform !== specs[field]) {
               matching = false;
@@ -160,8 +158,8 @@ var SauceBrowsers = {
       });
 
       return matching;
-    }).map(function (browser) {
-      var result;
+    }).map((browser) => {
+      let result;
 
       if (wrapped) {
         result = _.extend({}, browser);
@@ -207,16 +205,15 @@ var SauceBrowsers = {
     });
   },
 
-  _normalize: function (data) {
-    var result = data
-      .filter(function (browser) {
-        return browser.automation_backend === "webdriver"
-          || browser.automation_backend === "appium";
-      })
-      .map(function (browser) {
+  _normalize: (data) => {
+    const overallResult = data
+      .filter((browser) =>
+        browser.automation_backend === "webdriver" || browser.automation_backend === "appium"
+      )
+      .map((browser) => {
         // Name and Family
-        var name;
-        var family;
+        let name;
+        let family;
 
         if (browser.automation_backend === "appium") {
           if (browser.device.toLowerCase().indexOf("android") > -1) {
@@ -266,9 +263,9 @@ var SauceBrowsers = {
           }
         }
 
-        var deviceName;
-        var osName;
-        var hostOSName;
+        let deviceName;
+        let osName;
+        let hostOSName;
 
         // Device name, OS name, and the name of the "host" OS (i.e. a host OS for simulators)
 
@@ -309,7 +306,7 @@ var SauceBrowsers = {
           }
         }
 
-        var guacamoleId;
+        let guacamoleId;
 
         if (browser.automation_backend === "appium") {
           guacamoleId = cleanPlatformName(deviceName)
@@ -317,7 +314,7 @@ var SauceBrowsers = {
             + "_" + cleanPlatformName(browser.short_version)
             + "_" + cleanPlatformName(hostOSName);
         } else {
-          var osKey = cleanPlatformName(osName) + "_" + cleanPlatformName(deviceName);
+          const osKey = cleanPlatformName(osName) + "_" + cleanPlatformName(deviceName);
           guacamoleId = cleanPlatformName(name)
             + "_" + cleanPlatformName(browser.short_version)
             + "_" + osKey;
@@ -331,7 +328,7 @@ var SauceBrowsers = {
           }
         }
 
-        result = {
+        const result = {
           // name , version, OS, device
           id: guacamoleId,
           family: family,
@@ -361,15 +358,15 @@ var SauceBrowsers = {
         }
 
         return result;
-      }).map(function (browser) {
-        result = {
+      }).map((browser) => {
+        const result = {
           id: browser.id,
           family: browser.family,
           resolutions: browser.resolutions,
           desiredCapabilities: {}
         };
 
-        SauceBrowsers.CAPABILITY_FIELDS.forEach(function (field) {
+        SauceBrowsers.CAPABILITY_FIELDS.forEach((field) => {
           if (browser[field]) {
             result.desiredCapabilities[field] = browser[field];
           }
@@ -378,14 +375,14 @@ var SauceBrowsers = {
         return result;
       });
 
-    return _.sortBy(result, function (browser) { return browser.id; });
+    return _.sortBy(overallResult, (browser) => browser.id);
   },
 
   // Fetch a raw list of browsers from the Sauce API
-  _fetch: function () {
-    var deferred = Q.defer();
+  _fetch: () => {
+    const deferred = Q.defer();
 
-    request(this.SAUCE_URL, function (err, data) {
+    request(SauceBrowsers.SAUCE_URL, (err, data) => {
       if (err) {
         deferred.reject(err);
       } else {
@@ -402,47 +399,45 @@ var SauceBrowsers = {
     return deferred.promise;
   },
 
-  _fetchSync: function () {
-    var res = syncRequest("GET", this.SAUCE_URL);
-    var data;
+  _fetchSync: () => {
+    const res = syncRequest("GET", SauceBrowsers.SAUCE_URL);
+    let data;
     try {
       data = JSON.parse(res.getBody("utf8"));
     } catch (e) {
-      throw new Error("Could not fetch saucelabs browsers from " + this.SAUCE_URL);
+      throw new Error("Could not fetch saucelabs browsers from " + SauceBrowsers.SAUCE_URL);
     }
     return data;
   },
 
   // Signal that we want to load a shrinkwrap file (i.e. cached sauce labs API result) and bypass the Sauce API
-  useShrinkwrap: function (shrinkwrapFilepath) {
+  useShrinkwrap: (shrinkwrapFilepath) => {
     shrinkwrapFilepath = path.resolve(shrinkwrapFilepath || "./guacamole-shrinkwrap.json");
     try {
-      var data = JSON.parse(fs.readFileSync(shrinkwrapFilepath, "utf8"));
+      const data = JSON.parse(fs.readFileSync(shrinkwrapFilepath, "utf8"));
       if (data) {
-        this._haveCachedSauceBrowsers = true;
-        browsers = this._normalize(data);
+        SauceBrowsers._haveCachedSauceBrowsers = true;
+        browsers = SauceBrowsers._normalize(data);
       }
     } catch (e) {
       throw new Error("Could not read guacamole shrinkwrap file at : " + shrinkwrapFilepath);
     }
   },
 
-  useServiceSync: function () {
-    var data = this._fetchSync();
+  useServiceSync: () => {
+    const data = SauceBrowsers._fetchSync();
     if (data) {
-      this._haveCachedSauceBrowsers = true;
-      browsers = this._normalize(data);
+      SauceBrowsers._haveCachedSauceBrowsers = true;
+      browsers = SauceBrowsers._normalize(data);
     }
   },
 
-  addNormalizedBrowsersFromFile: function (filePath) {
+  addNormalizedBrowsersFromFile: (filePath) => {
     filePath = path.resolve(filePath);
     try {
-      var data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
       if (_.isArray(data)) {
-        data.forEach(function (normalizedBrowser) {
-          browsers.push(normalizedBrowser);
-        });
+        data.forEach((normalizedBrowser) => browsers.push(normalizedBrowser));
       }
     } catch (e) {
       throw new Error("Could not read file for additional devices/browsers at : " + filePath);
@@ -450,23 +445,22 @@ var SauceBrowsers = {
   },
 
   // Return a promise that we'll build a list of supported browsers
-  initialize: function () {
-    var deferred = Q.defer();
-    var self = this;
+  initialize: () => {
+    const deferred = Q.defer();
 
-    if (this._haveCachedSauceBrowsers) {
+    if (SauceBrowsers._haveCachedSauceBrowsers) {
       deferred.resolve();
       return deferred.promise;
     }
 
-    this._fetch()
-      .then(function (data) {
-        self._haveCachedSauceBrowsers = true;
-        browsers = self._normalize(data);
+    SauceBrowsers._fetch()
+      .then((data) => {
+        SauceBrowsers._haveCachedSauceBrowsers = true;
+        browsers = SauceBrowsers._normalize(data);
 
         deferred.resolve();
       })
-      .catch(function (err) {
+      .catch((err) => {
         deferred.reject(err);
       });
 

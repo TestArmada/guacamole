@@ -1,33 +1,33 @@
 /* eslint no-unused-vars: 0, no-undef: 0 */
 "use strict";
-var Browsers = require("../src/browsers");
-var Q = require("q");
-var fs = require("fs");
-var chai = require("chai");
-var path = require("path");
+const Browsers = require("../src/browsers");
+const Q = require("q");
+const fs = require("fs");
+const chai = require("chai");
+const path = require("path");
 
-var expect = chai.expect;
+const expect = chai.expect;
 
-var cachedBrowsers = JSON.parse(
+const cachedBrowsers = JSON.parse(
   fs.readFileSync(path.resolve("./test_support/cached_sauce_api_result.json"), "utf8"));
 
-describe("Compact Querying", function () {
+describe("Compact Querying", () => {
 
-  beforeEach(function (done) {
+  beforeEach((done) => {
     // Stub fetch with a cached Sauce API result
-    Browsers._fetch = function () {
-      var deferred = Q.defer();
+    Browsers._fetch = () => {
+      const deferred = Q.defer();
       deferred.resolve(cachedBrowsers);
       return deferred.promise;
     };
 
-    Browsers.initialize().then(function () {
+    Browsers.initialize().then(() => {
       done();
     });
   });
 
-  it("Finds a bunch of browsers from a compact query", function () {
-    var query = [
+  it("Finds a bunch of browsers from a compact query", () => {
+    const query = [
       {
         "browserName": "internet explorer",
         "versions": ["9", "10", "11"]  // should find one of each, ignoring platform

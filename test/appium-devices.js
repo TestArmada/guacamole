@@ -1,33 +1,34 @@
 /* eslint filenames/filenames: 0, no-unused-vars: 0, no-undef: 0 */
 "use strict";
-var Browsers = require("../src/browsers");
-var Q = require("q");
-var fs = require("fs");
-var chai = require("chai");
-var path = require("path");
+const Browsers = require("../src/browsers");
+const Q = require("q");
+const fs = require("fs");
+const chai = require("chai");
+const path = require("path");
 
-var expect = chai.expect;
+const expect = chai.expect;
 
-var cachedBrowsers = JSON.parse(fs.readFileSync(
+const cachedBrowsers = JSON.parse(fs.readFileSync(
   path.resolve("./test_support/cached_sauce_api_result.json"), "utf8"));
 
-describe("Appium Devices", function () {
+describe("Appium Devices", () => {
 
-  beforeEach(function (done) {
+  beforeEach((done) => {
     // Stub fetch with a cached Sauce API result
-    Browsers._fetch = function () {
-      var deferred = Q.defer();
+    Browsers._fetch = () => {
+      const deferred = Q.defer();
       deferred.resolve(cachedBrowsers);
       return deferred.promise;
     };
 
-    Browsers.initialize().then(function () {
+    Browsers.initialize().then(() => {
       done();
     });
   });
 
-  it("Finds an iPhone with iOS 8.2 Correctly (with multiple host OSes)", function () {
-    var result = Browsers.get({
+
+  it("Finds an iPhone with iOS 8.2 Correctly (with multiple host OSes)", () => {
+    const result = Browsers.get({
       "platformName": "iOS",
       "platformVersion": "8.2",
       "deviceName": "iPhone Simulator"
@@ -35,8 +36,8 @@ describe("Appium Devices", function () {
     expect(result).to.have.length(1);
   });
 
-  it("Finds a Google Nexus 7", function () {
-    var result = Browsers.get({
+  it("Finds a Google Nexus 7", () => {
+    const result = Browsers.get({
       "platformName": "Android",
       "platformVersion": "4.4",
       "deviceName": "Google Nexus 7 HD Emulator"
@@ -44,9 +45,9 @@ describe("Appium Devices", function () {
     expect(result).to.have.length(1);
   });
 
-  it("Adds an additional unlisted device from a file", function () {
+  it("Adds an additional unlisted device from a file", () => {
     Browsers.addNormalizedBrowsersFromFile(path.resolve("./test_support/device_additions.json"));
-    var result = Browsers.get({
+    const result = Browsers.get({
       "id": "iphone6_device"
     });
     expect(result).to.have.length(1);

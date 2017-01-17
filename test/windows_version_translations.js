@@ -1,74 +1,72 @@
 /* eslint no-unused-vars: 0, no-undef: 0, no-magic-numbers: 0 */
 "use strict";
-var Browsers = require("../src/browsers");
-var Q = require("q");
-var fs = require("fs");
-var chai = require("chai");
-var path = require("path");
+const Browsers = require("../src/browsers");
+const Q = require("q");
+const fs = require("fs");
+const chai = require("chai");
+const path = require("path");
 
-var expect = chai.expect;
+const expect = chai.expect;
 
-var cachedBrowsers = JSON.parse(
+const cachedBrowsers = JSON.parse(
   fs.readFileSync(path.resolve("./test_support/cached_sauce_api_result.json"), "utf8"));
 
-describe("Windows version translations", function () {
+describe("Windows version translations", () => {
 
-  beforeEach(function (done) {
+  beforeEach((done) => {
     // Stub fetch with a cached Sauce API result
-    Browsers._fetch = function () {
-      var deferred = Q.defer();
+    Browsers._fetch = () => {
+      const deferred = Q.defer();
       deferred.resolve(cachedBrowsers);
       return deferred.promise;
     };
 
-    Browsers.initialize().then(function () {
+    Browsers.initialize().then(() => {
       done();
     });
   });
 
-  it("Finds Windows XP correctly", function () {
-    var result = Browsers.get({ platform: "Windows XP" });
+  it("Finds Windows XP correctly", () => {
+    const result = Browsers.get({ platform: "Windows XP" });
     expect(result).to.have.length(71);
   });
 
-  it("Finds Windows 7 correctly", function () {
-    var result = Browsers.get({ platform: "Windows 7" });
+  it("Finds Windows 7 correctly", () => {
+    const result = Browsers.get({ platform: "Windows 7" });
     expect(result).to.have.length(86);
   });
 
-  it("Finds Windows 8 correctly", function () {
-    var result = Browsers.get({ platform: "Windows 8" });
+  it("Finds Windows 8 correctly", () => {
+    const result = Browsers.get({ platform: "Windows 8" });
     expect(result).to.have.length(80);
   });
 
-  it("Finds Windows 8.1 correctly", function () {
-    var result = Browsers.get({ platform: "Windows 8.1" });
+  it("Finds Windows 8.1 correctly", () => {
+    const result = Browsers.get({ platform: "Windows 8.1" });
     expect(result).to.have.length(80);
   });
 
-  it("Finds Windows XP browser ids correctly", function () {
-    var id = "chrome_43_Windows_XP_Desktop";
-    var result = Browsers.get({ id: id });
+  it("Finds Windows XP browser ids correctly", () => {
+    const id = "chrome_43_Windows_XP_Desktop";
+    const result = Browsers.get({ id });
     expect(result).to.have.length(1);
   });
 
-  it("Finds Windows 7 browser ids correctly", function () {
-    var id = "chrome_43_Windows_7_Desktop";
-    var result = Browsers.get({ id: id });
+  it("Finds Windows 7 browser ids correctly", () => {
+    const id = "chrome_43_Windows_7_Desktop";
+    const result = Browsers.get({ id });
     expect(result).to.have.length(1);
   });
 
-  it("Finds Windows 8 browser ids correctly", function () {
-    var id = "chrome_43_Windows_8_Desktop";
-    var result = Browsers.get({ id: id });
+  it("Finds Windows 8 browser ids correctly", () => {
+    const id = "chrome_43_Windows_8_Desktop";
+    const result = Browsers.get({ id });
     expect(result).to.have.length(1);
   });
 
-  it("Finds Windows 8.1 browser ids correctly", function () {
-    var id = "chrome_43_Windows_8_1_Desktop";
-    var result = Browsers.get({ id: id });
+  it("Finds Windows 8.1 browser ids correctly", () => {
+    const id = "chrome_43_Windows_8_1_Desktop";
+    const result = Browsers.get({ id });
     expect(result).to.have.length(1);
   });
-
-
 });
