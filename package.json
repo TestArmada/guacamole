@@ -1,6 +1,6 @@
 {
   "name": "guacamole",
-  "version": "1.3.0",
+  "version": "2.0.1",
   "description": "A friendly wrapper for the SauceLabs browser listing API",
   "main": "index.js",
   "directories": {

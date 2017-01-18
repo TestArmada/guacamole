@@ -86,5 +86,6 @@ if (argv.shrinkwrap) {
     .then(cli)
     .catch((err) => {
       console.log("error:", err);
+      console.log(err.stack);
     });
 }

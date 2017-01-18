@@ -13,7 +13,7 @@ module.exports = (callback) => {
 
   const maxFamWidth = _.max(Object.keys(families), (f) => f.length).length + 5;
 
-  const maxCLIWidth = _.max(_.pluck(browsers, "id"), (b) => b.length).length + 5;
+  const maxCLIWidth = _.max(_.map(browsers, "id"), (b) => b.length).length + 5;
 
   const maxBrowserWidth = _.max(browsers.map(
     (b) => b.desiredCapabilities.browserName || "Native app"
