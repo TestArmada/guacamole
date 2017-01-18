@@ -22,11 +22,11 @@ module.exports = (callback) => {
     (b) => b.desiredCapabilities.version || b.desiredCapabilities.platformVersion
   ), (b) => b.toString().length).length + 5;
 
-  const maxOSWidth = _.max(_.map(_.map(browsers, 
+  const maxOSWidth = _.max(_.map(_.map(browsers,
     (b) => b.desiredCapabilities.platform || b.desiredCapabilities.platformName),
     (b) => b.length)) + 5;
 
-  const maxDeviceWidth = _.max(_.map(_.map(browsers, 
+  const maxDeviceWidth = _.max(_.map(_.map(browsers,
     (b) => b.desiredCapabilities.deviceName || "Desktop"),
     (b) => b.length)) + 5;
 
