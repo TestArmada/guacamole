@@ -359,9 +359,9 @@ const SauceBrowsers = {
 
         // For Appium android, set browserName="Browser"
         if (result["appium-version"]) {
-          if (result.platformName === 'Android') {
+          if (result.platformName === "Android") {
             result.browserName = "Browser";
-          } else if(result.platformName === 'iOS') {
+          } else if (result.platformName === "iOS") {
             result.browserName = "Safari";
           }
         } 
