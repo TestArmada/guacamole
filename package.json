@@ -29,7 +29,7 @@
     "q": "^1.4.1",
     "request": "^2.58.0",
     "sync-request": "^4.0.1",
-    "vorpal": "^1.11.4",
+    "vorpal": "^1.12.0",
     "yargs": "^6.5.0"
   },
   "devDependencies": {
