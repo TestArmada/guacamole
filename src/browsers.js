@@ -348,6 +348,23 @@ const SauceBrowsers = {
             result.platformVersion = browser.short_version || browser.version;
             result.platformName = osName;
           }
+
+          // For Android Emulator, we need to set browserName to either Chrome or Browser depending on version
+          if (deviceName === "Android Emulator" && result.platformVersion) {
+            let version;
+            try {
+              version = parseFloat(result.platformVersion);
+            } catch (e) {
+              throw new Error("Expected platform version to be a number, but was " + result.platformVersion);
+            }
+            if (version) {
+              if (version >= 6.0) {
+                result.browserName = "Chrome";
+              } else {
+                result.browserName = "Browser";
+              }
+            }
+          }
         }
 
         // Note: we only set the device property if we have a non-desktop device. This is because
