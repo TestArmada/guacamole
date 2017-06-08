@@ -9,7 +9,7 @@ let request = require("request");
 if (process.env.SAUCE_OUTBOUND_PROXY) {
   // NOTE: It doesn't appear that syncRequest supports a proxy setting,
   // so only asynchronous access to guacamole will support SAUCE_OUTBOUND_PROXY
-  request = request.defaults(process.env.SAUCE_OUTBOUND_PROXY);
+  request = request.defaults({proxy: process.env.SAUCE_OUTBOUND_PROXY});
 }
 
 const syncRequest = require("sync-request");
