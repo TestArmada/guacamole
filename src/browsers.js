@@ -4,7 +4,7 @@
 const Q = require("q");
 const _ = require("lodash");
 
-var request = require("request");
+let request = require("request");
 
 if (process.env.SAUCE_OUTBOUND_PROXY) {
   // NOTE: It doesn't appear that syncRequest supports a proxy setting,
