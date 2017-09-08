@@ -8,6 +8,7 @@
   - Appium support for native app `desiredCapabilities` objects
   - Built-in command-line interface for listing browsers and generating `desiredCapabilities` objects.
   - Normalize strings from the SauceLabs browser list API to values that `desiredCapabilities` actually consumes.
+  - Proxy support if `SAUCE_OUTBOUND_PROXY` is set to a proxy address.
 
 ### Installation
 
@@ -363,6 +364,17 @@ Version: 52
 Platform: windows 2008
 > Generating sauce browser id...
 > Use chrome_52_Windows_2008_Desktop as your browser
+```
+
+### Proxy Configuration
+
+To use a proxy to reach Saucelabs when querying the Saucelabs API, `gaucamole` checks the presence of an environment variable called `SAUCE_OUTBOUND_PROXY`. Set this variable before using `gaucamole` on the CLI or programmatically to use a proxy.
+
+Note: Proxy configuration is not supported in **synchronous mode**.
+
+```console
+$ export SAUCE_OUTBOUND_PROXY=http://your-internal-proxy-host:8080
+$ guacamole
 ```
 
 ## Licenses

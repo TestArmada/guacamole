@@ -3,7 +3,18 @@
 "use strict";
 const Q = require("q");
 const _ = require("lodash");
-const request = require("request");
+
+let request = require("request");
+
+if (process.env.SAUCE_OUTBOUND_PROXY) {
+  // NOTE: It doesn't appear that syncRequest supports a proxy setting,
+  // so only asynchronous access to guacamole will support SAUCE_OUTBOUND_PROXY
+  request = request.defaults({
+    strictSSL: false,
+    proxy: process.env.SAUCE_OUTBOUND_PROXY
+  });
+}
+
 const syncRequest = require("sync-request");
 let browsers = [];
 const latest = {};
@@ -347,6 +358,23 @@ const SauceBrowsers = {
           if (deviceName.toLowerCase().indexOf("android") > -1) {
             result.platformVersion = browser.short_version || browser.version;
             result.platformName = osName;
+          }
+
+          // For Android Emulator, we need to set browserName to either Chrome or Browser depending on version
+          if (deviceName === "Android Emulator" && result.platformVersion) {
+            let version;
+            try {
+              version = parseFloat(result.platformVersion);
+            } catch (e) {
+              throw new Error("Expected platform version to be a number, but was " + result.platformVersion);
+            }
+            if (version) {
+              if (version >= 6.0) {
+                result.browserName = "Chrome";
+              } else {
+                result.browserName = "Browser";
+              }
+            }
           }
         }
 
