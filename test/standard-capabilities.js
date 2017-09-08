@@ -66,7 +66,7 @@ describe("Standard", () => {
     expect(target.desiredCapabilities).to.have.property("platformName", "iOS");
     expect(target.desiredCapabilities).to.have.property("platformVersion", "8.4");
     expect(target.desiredCapabilities).to.have.property("deviceName", "iPad Simulator");
-    expect(target.desiredCapabilities).to.have.property("appium-version");
+    expect(target.desiredCapabilities).to.have.property("appiumVersion");
   });
 
   it("standardize saucelabs capabilities of android emulator using selenium", () => {
