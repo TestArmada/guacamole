@@ -5,6 +5,7 @@ node_js:
   - v6
   - v5
   - v4
+  - 10
 
 sudo: false
 
