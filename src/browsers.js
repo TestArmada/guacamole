@@ -409,8 +409,12 @@ const SauceBrowsers = {
   // Fetch a raw list of browsers from the Sauce API
   _fetch: () => {
     const deferred = Q.defer();
-
-    request(SauceBrowsers.SAUCE_URL, (err, data) => {
+    const SAUCE_USERNAME = process.env.SAUCE_USERNAME;
+    const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY;
+    const url = SAUCE_USERNAME && SAUCE_ACCESS_KEY ?
+      SauceBrowsers.SAUCE_URL.replace(/^https:\/\//, "https://" + SAUCE_USERNAME + ":" + SAUCE_ACCESS_KEY + "@") :
+      SauceBrowsers.SAUCE_URL;
+    request(url, (err, data) => {
       if (err) {
         deferred.reject(err);
       } else {
