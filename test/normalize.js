@@ -78,4 +78,10 @@ describe("normalizer", () => {
     expect(() => Browsers._normalize(response)).to.throw(`Invalid Response: ${response}`);
   });
 
+  it("handles and logs a non-array, object response", () => {
+    const response = { error: "something went wrong" };
+    const expected = `Invalid Response: ${JSON.stringify(response)}`;
+    expect(() => Browsers._normalize(response)).to.throw(expected);
+  });
+
 });
