@@ -73,4 +73,15 @@ describe("normalizer", () => {
     expect(ipad).to.have.property("deviceOrientation", "landscape");
   });
 
+  it("handles and logs a non-array response", () => {
+    const response = null;
+    expect(() => Browsers._normalize(response)).to.throw(`Invalid Response: ${response}`);
+  });
+
+  it("handles and logs a non-array, object response", () => {
+    const response = { error: "something went wrong" };
+    const expected = `Invalid Response: ${JSON.stringify(response)}`;
+    expect(() => Browsers._normalize(response)).to.throw(expected);
+  });
+
 });

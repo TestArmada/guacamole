@@ -217,6 +217,9 @@ const SauceBrowsers = {
   },
 
   _normalize: (data) => {
+    if (!Array.isArray(data)) {
+      throw new Error(`Invalid Response: ${JSON.stringify(data)}`);
+    }
     const overallResult = data
       .filter((browser) =>
         browser.automation_backend === "webdriver" || browser.automation_backend === "appium"
