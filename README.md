@@ -121,7 +121,7 @@ $ ./node_modules/.bin/guacamole --id=firefox_latest_OS_X_10_9_Desktop
 
 Amend screenResolution with `--screenResolution`. If the API supports that screen resolution, you'll get a result:
 ```console
-$ ./bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x768
+$ ./node_modules/.bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x768
 { browserName: 'firefox',
   version: '38',
   platform: 'OS X 10.9',
@@ -130,7 +130,7 @@ $ ./bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x768
 
 If you choose a resolution that isn't supported, you'll get an error:
 ```console
-$ ./bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x555
+$ ./node_modules/.bin/guacamole --id=firefox_38_OS_X_10_9_Desktop --screenResolution=1024x555
 Browsers that match the following specs could not be found:  { screenResolution: '1024x555',
   id: 'firefox_38_OS_X_10_9_Desktop' }
 ```
@@ -139,7 +139,7 @@ Browsers that match the following specs could not be found:  { screenResolution:
 
 For example, filtering by `--version=43` displays all available versions of Chrome 43:
 ```console
-$ ./bin/guacamole --version=43
+$ ./node_modules/.bin/guacamole --version=43
 [
   {
     "browserName": "chrome",
@@ -199,7 +199,7 @@ $ ./bin/guacamole --version=43
 `guacamole` supports appium environments, and will ensure that the `appium-version` is set to the currently-recommended backend version of Appium. Examples:
 
 ```sh
-$ ./bin/guacamole --id=Google_Nexus_7_HD_Emulator_Android_4_4_Linux
+$ ./node_modules/.bin/guacamole --id=Google_Nexus_7_HD_Emulator_Android_4_4_Linux
 [
   {
     "version": "4.4",
@@ -209,7 +209,7 @@ $ ./bin/guacamole --id=Google_Nexus_7_HD_Emulator_Android_4_4_Linux
   }
 ]
 
-$ ./bin/guacamole --id=iPhone_Simulator_iOS_8_2_OS_X_10_10
+$ ./node_modules/.bin/guacamole --id=iPhone_Simulator_iOS_8_2_OS_X_10_10
 [
   {
     "version": "8.2",
