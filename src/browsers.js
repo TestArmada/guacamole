@@ -417,7 +417,24 @@ const SauceBrowsers = {
     const url = SAUCE_USERNAME && SAUCE_ACCESS_KEY ?
       SauceBrowsers.SAUCE_URL.replace(/^https:\/\//, "https://" + SAUCE_USERNAME + ":" + SAUCE_ACCESS_KEY + "@") :
       SauceBrowsers.SAUCE_URL;
-    request(url, (err, data) => {
+    const MAX_RETRIES = 3;
+    const requestRetry = (_url, callback, retries = MAX_RETRIES) => {
+      request(_url, (verror, vres) => {
+        if (verror) {
+          if (retries > 0) {
+            /* eslint-disable no-console */
+            console.warn(`Request to ${SauceBrowsers.SAUCE_URL} failed. Retries=${retries}`);
+            /* eslint-enable no-console */
+            return requestRetry(_url, callback, retries - 1);
+          } else {
+            return callback(verror, vres);
+          }
+        }
+        return callback(verror, vres);
+      });
+    };
+
+    requestRetry(url, (err, data) => {
       if (err) {
         deferred.reject(err);
       } else {
