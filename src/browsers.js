@@ -74,7 +74,7 @@ const SauceBrowsers = {
   // NOTE: The URL https://saucelabs.com/rest/v1/info/platforms/webdriver has this
   // information, but not the available resolutions. That's why we go to the endpoint
   // with the much larger set of options (+ automation backends) and then filter down.
-  SAUCE_URL: "https://" + (process.env.SAUCE_API_HOST || "saucelabs.com") + "/rest/v1/info/platforms/all?resolutions=true",
+  SAUCE_URL: "https://" + (process.env.SAUCE_APP_HOST || "saucelabs.com") + "/rest/v1/info/platforms/all?resolutions=true",
   _haveCachedSauceBrowsers: false,
 
   filter: (fn) => browsers.filter(fn),
