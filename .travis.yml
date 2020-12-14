@@ -1,10 +1,9 @@
 language: node_js
 
 node_js:
-  - v7
-  - v6
-  - v5
-  - v4
+  - v14
+  - v12
+  - v10
 
 sudo: false
 
