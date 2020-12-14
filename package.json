@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm run lint && ./node_modules/.bin/mocha test",
     "dev-test": "mocha test",
-    "lint": "eslint src/** bin/** test/** --fix",
+    "lint": "eslint src/** bin/** test/**",
     "coverage": "istanbul cover _mocha -- --recursive"
   },
   "repository": {
