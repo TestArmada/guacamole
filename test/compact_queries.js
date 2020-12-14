@@ -30,7 +30,7 @@ describe("Compact Querying", () => {
     const query = [
       {
         "browserName": "internet explorer",
-        "versions": ["9", "10", "11"]  // should find one of each, ignoring platform
+        "versions": ["9", "10", "11"] // should find one of each, ignoring platform
       },
       {
         "browserName": "chrome" // should find one, highest version since no versions asked for
