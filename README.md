@@ -1,3 +1,7 @@
+# :warning::warning: DEPRECATED :warning::warning:
+
+This project, and it's related TestArmada projects, will no longer be supported. No further work from the owners will be done, and no PRs will be reviewed.
+
 # magellan-saucelabs-plugin
 
 `magellan-saucelabs-plugin` is a wrapper for the SauceLabs platform API (i.e. the browser/platform selector API).
